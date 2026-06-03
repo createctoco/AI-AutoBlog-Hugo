@@ -2,7 +2,7 @@
 # Auto-generate SEO articles for Alibaba traffic引流
 # Powered by DeepSeek / OpenAI API + Hugo + GitHub Pages
 
-baseurl: "https://createctoco.github.io/rosary/"
+baseurl: "https://github.com/createctoco/rosary"
 languageCode: "en-us"
 title: "Catholic Religious Gifts Guide"
 theme: "PaperMod"
