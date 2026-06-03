@@ -68,7 +68,8 @@ params:
   ShowCodeCopyButtons: false
   ShowWordCount: true
   ShowToc: false
-
+  customCSS:
+    - css/extended/custom.css
   homeInfoParams:
     Title: "Catholic Religious Gifts & Rosary Beads Guide"
     Content: "Your trusted source for wholesale catholic rosary beads, crucifix pendants, religious medals, and church supplies."
