@@ -25,6 +25,9 @@ jobs:
       - name: Install Python dependencies
         run: pip install requests pyyaml
 
+      - name: Create posts directory
+        run: mkdir -p content/posts
+
       - name: Generate blog post
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
