@@ -1,4 +1,6 @@
-/* Professional B2B Blog Theme - 1200px Wide */
+/* ============================================
+   Professional B2B Blog Theme - 1200px Wide
+   ============================================ */
 
 :root {
   --primary: #1a365d;
@@ -10,18 +12,18 @@
   --bg: #ffffff;
   --bg-secondary: #f7fafc;
   --border: #e2e8f0;
-  --shadow: 0 4px 6px rgba(0,0,0,0.05);
-  --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-/* Main Container - 1200px Width */
+/* ===== Main Container - 1200px Width ===== */
 .main {
   max-width: 1200px !important;
   padding: 0 40px;
   margin: 0 auto;
 }
 
-/* Header */
+/* ===== Header ===== */
 .nav {
   background: var(--bg);
   box-shadow: var(--shadow);
@@ -37,7 +39,7 @@
   letter-spacing: -0.5px;
 }
 
-/* Home Info */
+/* ===== Home Info ===== */
 .home-info {
   text-align: center;
   padding: 80px 0 60px;
@@ -53,7 +55,13 @@
   margin-bottom: 20px;
 }
 
-/* Post Cards */
+.home-info p {
+  font-size: 1.2rem;
+  color: var(--text-light);
+  line-height: 1.8;
+}
+
+/* ===== Post Cards ===== */
 .post-entry {
   background: var(--bg);
   border: 1px solid var(--border);
@@ -87,7 +95,63 @@
   color: var(--secondary);
 }
 
-/* Alibaba Banner */
+.post-description {
+  color: var(--text-light);
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+.post-meta {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid var(--border);
+}
+
+/* ===== Post Content ===== */
+.post-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 0;
+  line-height: 1.9;
+  color: var(--text);
+}
+
+.post-content h1,
+.post-content h2,
+.post-content h3 {
+  color: var(--primary);
+  font-weight: 700;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  line-height: 1.3;
+}
+
+.post-content h2 {
+  font-size: 2rem;
+  padding-bottom: 10px;
+  border-bottom: 3px solid var(--secondary);
+  display: inline-block;
+}
+
+.post-content p {
+  margin-bottom: 20px;
+  font-size: 1.05rem;
+}
+
+.post-content a {
+  color: var(--secondary);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.post-content a:hover {
+  border-bottom-color: var(--secondary);
+}
+
+/* ===== Alibaba Banner ===== */
 .alibaba-banner {
   background: linear-gradient(135deg, var(--secondary) 0%, #e3c77a 100%);
   padding: 30px;
@@ -121,7 +185,90 @@
   box-shadow: var(--shadow-lg);
 }
 
-/* Responsive Design */
+/* ===== Sidebar ===== */
+.sidebar {
+  padding: 30px 0;
+}
+
+.sidebar section {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: var(--shadow);
+}
+
+.sidebar h3 {
+  color: var(--primary);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--secondary);
+}
+
+/* ===== Tags ===== */
+.post-tags a {
+  background: var(--bg-secondary);
+  color: var(--text);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border);
+}
+
+.post-tags a:hover {
+  background: var(--secondary);
+  color: white;
+  border-color: var(--secondary);
+}
+
+/* ===== Pagination ===== */
+.pagination {
+  margin: 60px 0;
+  text-align: center;
+}
+
+.page-item {
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.page-item a {
+  padding: 10px 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.page-item.active a,
+.page-item a:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* ===== Footer ===== */
+.footer {
+  background: var(--primary);
+  color: white;
+  padding: 60px 40px;
+  margin-top: 80px;
+}
+
+.footer a {
+  color: var(--secondary);
+  text-decoration: none;
+}
+
+/* ===== Responsive Design ===== */
+
+/* Tablet */
 @media (max-width: 1024px) {
   .main {
     max-width: 100%;
@@ -131,8 +278,13 @@
   .home-info h1 {
     font-size: 2.5rem;
   }
+  
+  .post-title {
+    font-size: 1.4rem;
+  }
 }
 
+/* Mobile */
 @media (max-width: 768px) {
   .main {
     padding: 0 20px;
@@ -150,11 +302,46 @@
     font-size: 2rem;
   }
   
+  .home-info p {
+    font-size: 1rem;
+  }
+  
   .post-entry {
     padding: 20px;
   }
   
   .post-title {
     font-size: 1.2rem;
+  }
+  
+  .post-content {
+    padding: 20px 0;
+  }
+  
+  .post-content h2 {
+    font-size: 1.5rem;
+  }
+  
+  .alibaba-banner {
+    padding: 20px;
+  }
+  
+  .footer {
+    padding: 40px 20px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .home-info h1 {
+    font-size: 1.6rem;
+  }
+  
+  .post-entry {
+    padding: 15px;
+  }
+  
+  .post-title {
+    font-size: 1.1rem;
   }
 }
