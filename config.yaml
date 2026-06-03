@@ -1,166 +1,62 @@
-﻿# AI-AutoBlog Hugo - Catholic Religious Gifts Auto Blog
-# Auto-generate SEO articles for Alibaba traffic引流
-# Powered by DeepSeek / OpenAI API + Hugo + GitHub Pages
-
-baseurl: "https://github.com/createctoco/rosary"
+baseURL: "https://createctoco.github.io/rosary/"
 languageCode: "en-us"
-title: "Catholic Religious Gifts Guide"
+title: "Rosary Blog"
 theme: "PaperMod"
 
-# ============================================
-# AUTO BLOG SETTINGS (Core)
-# ============================================
-
-# Cron schedule (UTC time) - default: daily at 3am UTC
-# "0 3 * * *"     = every day at 3:00 AM UTC
-# "0 3 */2 * *"   = every 2 days at 3:00 AM UTC
-# "0 3 * * 1"     = every Monday at 3:00 AM UTC
-cron: "0 3 * * *"
-
-# Review mode: true = manual review (PR), false = auto publish
-review_mode: false
-
-# Auto generate featured image with AI
-auto_image: true
-
-# AI image prompt style
-image_style: "elegant religious product photography, soft lighting, clean white background, professional studio shot"
-
-# ============================================
-# ALIBABA STORE LINKS (Traffic引流)
-# ============================================
-
-alibaba_store_url: "https://mecrt.en.alibaba.com/"
-
-# Rosary product links (6 products)
-alibaba_product_urls:
-  - url: "https://www.alibaba.com/product-detail/Catholic-Rosary-Prayer-Beads-8-10mm_1601125568905.html"
-    anchor: "Wholesale Wooden Catholic Rosary Beads"
-  - url: "https://www.alibaba.com/product-detail/Catholic-Rosary-Crucifix-Religious-Jewelry-Saint_1601126619552.html"
-    anchor: "Catholic Rosary Bulk Supply"
-  - url: "https://www.alibaba.com/product-detail/Catholic-Rosary-Necklace-Jesus-Cross-Pendant_1601127964579.html"
-    anchor: "Catholic Rosary and Cross Gift Set"
-  - url: "https://www.alibaba.com/product-detail/Catholic-Rosary-Prayer-Beads-8-10mm_1601629510892.html"
-    anchor: "Wood Rosary Wholesale"
-  - url: "https://www.alibaba.com/product-detail/Rose-Fragrance-Wooden-Bead-6mm-Holy_1601140558861.html"
-    anchor: "Birthstone Color Rosary Beads Factory"
-  - url: "https://www.alibaba.com/product-detail/Catholic-Scapulars-Worship-Embroidery-Liturgical-Stole_1601321075842.html"
-    anchor: "Catholic Scapulars Wholesale"
-
-# ============================================
-# KEYWORDS (B2B Wholesale Long-tail Terms)
-# ============================================
-
-keywords:
-  # Rosary Beads - Buying Guide
-  - wholesale catholic rosary beads
-  - how to choose catholic rosary beads for beginners
-  - catholic rosary bead materials comparison
-  - best wood for catholic rosary beads
-  - crystal rosary beads vs glass rosary beads
-  - wholesale wooden rosary beads bulk
-  - custom catholic rosary beads OEM
-
-  # Rosary - Prayer Guide
-  - how to pray the catholic rosary step by step
-  - catholic rosary prayers for beginners
-  - meaning of rosary beads colors
-  - 5 decade rosary vs 15 decade rosary
-  - rosary bead count 59 vs 108 difference
-
-  # Cross & Crucifix
-  - wholesale christian cross pendant
-  - wooden cross pendant vs metal cross
-  - catholic crucifix vs protestant cross difference
-  - custom metal crucifix OEM manufacturer
-  - bulk religious cross necklace wholesale
-
-  # Islamic Tasbih / Prayer Beads
-  - islamic prayer beads 99 tasbih guide
-  - wholesale misbaha prayer beads supplier
-  - tesbih beads materials comparison
-  - custom islamic prayer beads OEM factory
-  - bulk muslim prayer beads 33 99 count
-
-  # Religious Gifts Wholesale
-  - catholic religious gifts wholesale supplier
-  - church supply religious items bulk order
-  - religious souvenir gifts for church
-  - christian gift ideas for baptism communion
-  - wholesale religious medal and pendant
-
-  # B2B Sourcing & Factory
-  - catholic religious goods manufacturer China
-  - OEM religious jewelry factory direct
-  - custom design rosary beads MOQ
-  - religious product quality inspection tips
-  - import religious items from China guide
-
-  # Saints & Devotional
-  - catholic saint medals meaning and history
-  - our lady of guadalupe religious gifts
-  - st michael pendant religious jewelry
-  - guardian angel medals wholesale
-  - four way medal catholic necklace
-
-  # Niche Long-tail SEO
-  - rosary beads as funeral gifts guide
-  - first communion rosary gift guide
-  - wedding rosary las arras guide
-  - catholic advent wreath and rosary
-  - handmade wooden rosary craft techniques
-  - how to start a religious gift shop
-  - religious goods market trends 2026
-  - church procurement guide for religious items
-  - difference between dominican and franciscan rosary
-
 params:
-  env: production
-  author: "CTOCO Religious Gifts"
-  defaultTheme: auto
+  # SEO & Site Info
+  description: "Wholesale Catholic rosary beads, Christian gifts, and religious articles directly from factory."
+  author: "Rosary Factory"
+  
+  # Alibaba links - 改成你自己的！
+  alibaba:
+    store: "https://www.alibaba.com/store/your-store"
+    products:
+      - "https://www.alibaba.com/product-detail/rosary-beads-1"
+      - "https://www.alibaba.com/product-detail/rosary-beads-2"
+      - "https://www.alibaba.com/product-detail/rosary-beads-3"
+      - "https://www.alibaba.com/product-detail/rosary-beads-4"
+      - "https://www.alibaba.com/product-detail/rosary-beads-5"
+      - "https://www.alibaba.com/product-detail/rosary-beads-6"
+
+  # B2B Keywords for AI to pick from
+  keywords:
+    - "wholesale catholic rosary beads"
+    - "custom rosary beads bulk"
+    - "rosary beads factory price"
+    - "religious gifts wholesale"
+    - "catholic supplies distributor"
+    - "wooden rosary beads OEM"
+    - "rosary beads for church"
+    - "promotional rosary beads"
+    - "rosary beads import from China"
+    - "wholesale christian gifts"
+
+  # Cron schedule (UTC time)
+  cron: "0 3 * * *"
+
+# PaperMod theme settings
+params:
   ShowReadingTime: true
   ShowShareButtons: false
   ShowPostNavLinks: true
   ShowBreadCrumbs: true
-  ShowCodeCopyButtons: false
-  ShowToc: false
-
-  homeInfoParams:
-    Title: "Catholic Religious Gifts & Rosary Beads Guide"
-    Content: "Your trusted source for wholesale catholic rosary beads, crucifix pendants, religious medals, and church supplies. Expert buying guides, material comparisons, and sourcing tips for global wholesale buyers."
-
-  socialIcons:
-    - name: "alibaba"
-      url: "{{ .Site.Params.alibaba_store_url }}"
-    - name: "facebook"
-      url: "https://facebook.com/ctoco"
-    - name: "youtube"
-      url: "https://youtube.com/@ctoco"
-
-  # Alibaba sidebar button
-  alibaba_store_url: "https://mecrt.en.alibaba.com/"
-
-menu:
-  sidebar:
-    - name: "Home"
-      url: "/"
-      weight: 1
-    - name: "Rosary Guide"
-      url: "/categories/rosary/"
-      weight: 2
-    - name: "Cross & Crucifix"
-      url: "/categories/cross/"
-      weight: 3
-    - name: "Tasbih & Prayer Beads"
-      url: "/categories/tasbih/"
-      weight: 4
-    - name: "Wholesale Guide"
-      url: "/categories/wholesale/"
-      weight: 5
-    - name: "Alibaba Store"
-      url: "https://mecrt.en.alibaba.com/"
-      weight: 6
-
-taxonomies:
-  category: categories
-  tag: tags
+  ShowCodeCopyButtons: true
+  ShowWordCount: true
+  ShowRssButton: true
+  ShowTaxonomies: true
+  
+  # Homepage profile
+  profileMode:
+    enabled: true
+    title: "Rosary Factory Blog"
+    subtitle: "Wholesale Catholic rosary beads & religious gifts directly from factory. B2B blog for churches, distributors, and retailers."
+    imageUrl: "https://via.placeholder.com/120"
+    imageTitle: "Rosary Factory"
+    imageWidth: 120
+    imageHeight: 120
+    buttons:
+      - name: "Visit Alibaba Store"
+        url: "https://www.alibaba.com/store/your-store"
+      - name: "RSS Feed"
+        url: "index.xml"
