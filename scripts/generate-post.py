@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """
-AI Blog Post Generator for Hugo
-Reads config.yaml, picks the next unused keyword, generates an article via DeepSeek/OpenAI API,
-saves as Hugo markdown post in content/posts/
+Auto-generate a B2B SEO blog post using DeepSeek API.
+Saves output as content/posts/YYYY-MM-DD-slug.md
 """
 
 import os
@@ -10,204 +9,189 @@ import sys
 import json
 import yaml
 import requests
-import re
-import hashlib
-import random
-from datetime import datetime, timezone
+from datetime import datetime
 
-# ============================================
-# Load Configuration
-# ============================================
-with open("config.yaml", "r") as f:
-    config = yaml.safe_load(f)
+# ---------- helpers ----------
+def load_config():
+    with open("config.yaml", "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
 
-keywords = config.get("keywords", [])
-alibaba_store_url = config.get("alibaba_store_url", "https://mecrt.en.alibaba.com/")
-alibaba_products = config.get("alibaba_product_urls", [])
-auto_image = config.get("auto_image", True)
-review_mode = config.get("review_mode", False)
-image_style = config.get("image_style", "elegant product photography, soft lighting, clean background")
+def pick_keyword(config):
+    keywords = config.get("keywords", [])
+    posts_dir = "content/posts"
+    existing = set()
+    if os.path.exists(posts_dir):
+        for fname in os.listdir(posts_dir):
+            if fname.endswith(".md"):
+                with open(os.path.join(posts_dir, fname), "r", encoding="utf-8") as f:
+                    for line in f:
+                        if line.startswith("keyword:"):
+                            val = line.split(":", 1)[1].strip().strip('"').strip("'")
+                            existing.add(val)
+    available = [k for k in keywords if k not in existing]
+    if not available:
+        available = keywords
+    return available[0]
 
-# Pick 2-3 random product links for this article
-num_links = min(random.randint(2, 3), len(alibaba_products))
-selected_products = random.sample(alibaba_products, num_links) if alibaba_products else []
-
-# AI API Configuration
-api_key = os.environ.get("OPENAI_API_KEY", "")
-ai_model = os.environ.get("AI_MODEL", "deepseek-chat")
-ai_base_url = os.environ.get("AI_BASE_URL", "https://api.deepseek.com/v1").rstrip("/")
-
-if not api_key:
-    print("ERROR: OPENAI_API_KEY not set")
-    sys.exit(1)
-
-# ============================================
-# Find Next Unused Keyword
-# ============================================
-existing_keywords = set()
-posts_dir = "content/posts"
-if os.path.isdir(posts_dir):
-    for filename in os.listdir(posts_dir):
-        if filename.endswith(".md"):
-            filepath = os.path.join(posts_dir, filename)
-            with open(filepath, "r", encoding="utf-8") as f:
-                for line in f:
-                    if line.startswith("keyword:"):
-                        existing_keywords.add(
-                            line.split(":", 1)[1].strip().strip('"').strip("'")
-                        )
-
-available = [k for k in keywords if k not in existing_keywords]
-if not available:
-    # All keywords used, restart from the beginning
-    available = keywords
-    print("All keywords have been used. Starting over.")
-
-keyword = available[0]
-print(f"Selected keyword: {keyword}")
-
-# ============================================
-# AI Prompt (B2B Wholesale + Alibaba Traffic)
-# ============================================
-title_prompt = f"""Suggest 3 SEO-optimized blog post titles for the topic: "{keyword}"
-The titles should target wholesale buyers, importers, and church procurement officers.
-Return ONLY the titles, one per line, no numbering, no extra comments.
-Keep titles under 70 characters for Google SERP."""
-
-content_prompt = f"""Write a 1100-1300 word English B2B SEO article for the catholic religious gifts industry.
-Target audience: global wholesale buyers, importers, church procurement officers, and gift shop owners.
-
-Topic: {keyword}
-
-Requirements:
-1. Structure: H1 title + multiple H2/H3 subheadings
-2. Content must include: product buying guide, wholesale MOQ tips, material introduction, quality inspection advice
-3. Write in professional B2B tone, informative and authoritative
-4. Include practical tips buyers can act on immediately
-5. NO fluff or filler content - every sentence must provide real value
-
-Naturally insert these hyperlinks in the article text (use appropriate anchor text, max 3 links total):
-- Link to "{alibaba_store_url}" with anchor text like "Professional Catholic Religious Gifts Wholesale Supplier" or "Verified Religious Gifts Manufacturer"
-""" + "\n".join([
-    f'- Link to "{p["url"]}" with anchor text: "{p["anchor"]}"'
-    for p in selected_products
-]) + """
-
-At the end of the article, add a FAQ section with 3-5 common questions and detailed answers about this topic.
-
-Then add this exact HTML block at the very end (before closing):
-<div style="margin:30px 0;padding:20px;background:#f5f5f5;border-radius:6px;border-left:4px solid #c81623;">
-<p><strong>Looking for bulk catholic religious gifts, rosary, or cross pendants?</strong> We are a verified Alibaba supplier offering custom OEM, factory direct pricing, and worldwide shipping.</p>
-<a href="{alibaba_store_url}" target="_blank" rel="noopener" style="display:inline-block;padding:10px 20px;background:#ff4400;color:#fff;border-radius:4px;font-weight:bold;text-decoration:none;margin-top:10px;">Browse All Products on Alibaba.com</a>
-</div>
-
-Output in standard Markdown format with proper H2/H3 headers, bullet points where appropriate, and bold text for emphasis.
-Do NOT add any preamble or commentary - just output the article directly."""
-
-# ============================================
-# Call AI API (OpenAI Compatible)
-# ============================================
-def call_ai(prompt, max_tokens=4000):
-    """Call DeepSeek or OpenAI compatible API"""
-    url = f"{ai_base_url}/chat/completions"
+def call_deepseek(api_key, model, api_url, prompt):
     headers = {
-        "Content-Type": "application/json",
         "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
     }
     payload = {
-        "model": ai_model,
-        "messages": [
-            {"role": "system", "content": "You are a professional B2B content writer specializing in catholic religious gifts, rosary beads, and church supplies. You write SEO-optimized articles for wholesale buyers."},
-            {"role": "user", "content": prompt},
-        ],
-        "temperature": 0.8,
-        "max_tokens": max_tokens,
+        "model": model,
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.7,
+        "max_tokens": 2000
     }
+    resp = requests.post(
+        f"{api_url}/chat/completions",
+        headers=headers,
+        json=payload,
+        timeout=60
+    )
+    resp.raise_for_status()
+    return resp.json()["choices"][0]["message"]["content"]
 
-    try:
-        response = requests.post(url, headers=headers, json=payload, timeout=120)
-        response.raise_for_status()
-        data = response.json()
-        return data["choices"][0]["message"]["content"].strip()
-    except Exception as e:
-        print(f"ERROR calling AI API: {e}")
-        sys.exit(1)
+def build_prompt(keyword, config):
+    alibaba = config.get("alibaba", {})
+    product_links = alibaba.get("products", [])
+    store_link = alibaba.get("store", "https://www.alibaba.com")
 
-print("Generating title...")
-title_raw = call_ai(title_prompt, max_tokens=500)
-titles = [t.strip().lstrip("0123456789.-) ") for t in title_raw.split("\n") if t.strip()]
-title = titles[0] if titles else keyword.replace("-", " ").title()
+    return f"""You are a B2B SEO content writer for a Catholic rosary beads factory.
 
-print(f"Article title: {title}")
-print("Generating article content...")
-content = call_ai(content_prompt, max_tokens=4000)
+Write a 1100-1300 word English blog post targeting: {keyword}
 
-# ============================================
-# Generate Hugo Front Matter + Save
-# ============================================
-now = datetime.now(timezone.utc)
-date_str = now.strftime("%Y-%m-%d")
-datetime_str = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+Requirements:
+- Write in professional B2B English, targeting wholesale buyers, importers, church procurement officers
+- Include a proper title (H1)
+- Use H2 and H3 subheadings
+- Naturally mention 2-3 of these Alibaba product links in the body:
+  {chr(10).join(['  - ' + link for link in product_links])}
+- End with a conclusion
+- Do NOT write meta description or JSON-LD (I will add them separately)
+- The tone should be informative, trust-building, suitable for B2B wholesale buyers
 
-# Clean title for filename
-safe_title = re.sub(r"[^a-zA-Z0-9\s-]", "", title.lower())
-safe_title = re.sub(r"\s+", "-", safe_title).strip("-")[:80]
-filename = f"{date_str}-{safe_title}.md"
-filepath = os.path.join(posts_dir, filename)
-
-# Auto-generate tags from keyword
-tags = keyword.split()[:5]
-if len(tags) < 2:
-    tags = [keyword]
-
-# Determine category
-if any(w in keyword.lower() for w in ["rosary", "bead", "pray", "tasbih", "misbaha"]):
-    category = "Rosary"
-elif any(w in keyword.lower() for w in ["cross", "crucifix", "pendant"]):
-    category = "Cross"
-elif any(w in keyword.lower() for w in ["wholesale", "bulk", "oem", "factory", "import", "sourcing"]):
-    category = "Wholesale"
-elif any(w in keyword.lower() for w in ["saint", "medal", "guardian", "lady"]):
-    category = "Devotional"
-else:
-    category = "Guide"
-
-# Generate meta description
-meta_desc = content[:160].replace("\n", " ").strip()
-
-front_matter = f"""---
-title: "{title}"
-date: {datetime_str}
-draft: false
-keyword: "{keyword}"
-tags: [{", ".join(tags)}]
-categories: [{category}]
-description: "{meta_desc}"
-author: "CTOCO Religious Gifts"
-ShowToc: true
-TocOpen: false
----
-
+Output the article in clean HTML format (use <h1>, <h2>, <h3>, <p>, <ul>, <li> tags where appropriate).
 """
 
-full_post = front_matter + "\n" + content
+def extract_title(article_text):
+    import re
+    match = re.search(r'<h1[^>]*>(.*?)</h1>', article_text, re.IGNORECASE)
+    if match:
+        return re.sub(r'<[^>]+>', '', match.group(1)).strip()
+    lines = article_text.split('\n')
+    for line in lines:
+        line = line.strip()
+        if line:
+            return line[:80]
+    return "Untitled"
 
-with open(filepath, "w", encoding="utf-8") as f:
-    f.write(full_post)
+def random_product_links(config, count=2):
+    import random
+    products = config.get("alibaba", {}).get("products", [])
+    if not products:
+        return []
+    return random.sample(products, min(count, len(products)))
 
-print(f"Post saved: {filepath}")
-print(f"Keyword: {keyword}")
-print(f"Title: {title}")
-print(f"Category: {category}")
-print(f"Tags: {tags}")
-print(f"Word count: ~{len(content.split())}")
+def build_markdown(title, keyword, article_html, config):
+    today = datetime.now().strftime("%Y-%m-%d")
+    slug = title.lower().replace(" ", "-").replace("&", "and")[:60]
+    # Remove special chars from slug
+    import re
+    slug = re.sub(r'[^a-z0-9\-]', '', slug)
 
-# ============================================
-# Optional: Generate Featured Image Prompt
-# ============================================
-if auto_image:
-    image_prompt = f"{keyword}, {image_style}"
-    image_prompt_hash = hashlib.md5(image_prompt.encode()).hexdigest()[:8]
-    print(f"Image prompt (save for manual use or integrate with image API): {image_prompt}")
+    store_link = config.get("alibaba", {}).get("store", "https://www.alibaba.com")
+    product_links = random_product_links(config, 2)
 
-print("\nDone! Post generated successfully.")
+    # Build JSON-LD FAQ (SEO)
+    faq_json_ld = """<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Where can I buy wholesale catholic rosary beads?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can buy wholesale catholic rosary beads directly from factory on Alibaba. We supply churches, distributors, and retailers worldwide."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you support custom rosary beads OEM?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, we support custom rosary beads with your logo, packaging, and material requirements. MOQ applies."
+      }
+    }
+  ]
+}
+</script>"""
+
+    # Alibaba CTA block
+    cta_block = f"""
+> **Looking for wholesale catholic rosary beads?**  
+> Visit our Alibaba store: [{store_link}]({store_link})  
+> {" ".join([f'[View Product]({link})' for link in product_links])}
+"""
+
+    content = f"""---
+title: "{title}"
+date: {today}T00:00:00+08:00
+draft: false
+keyword: "{keyword}"
+tags: ["wholesale", "catholic", "rosary", "B2B"]
+categories: ["Rosary Beads"]
+---
+
+{faq_json_ld}
+
+{article_html}
+
+---
+
+{cta_block}
+"""
+
+    filepath = f"content/posts/{today}-{slug}.md"
+    return filepath, content
+
+# ---------- main ----------
+def main():
+    config = load_config()
+    keyword = pick_keyword(config)
+    print(f"Selected keyword: {keyword}")
+
+    api_key = os.environ.get("OPENAI_API_KEY")
+    model = os.environ.get("AI_MODEL", "deepseek-chat")
+    api_url = os.environ.get("AI_API_URL", "https://api.deepseek.com/v1")
+
+    if not api_key:
+        print("ERROR: OPENAI_API_KEY not set")
+        sys.exit(1)
+
+    print("Generating title...")
+    title_prompt = f"Generate a short, SEO-friendly blog post title about: {keyword}. Output ONLY the title, nothing else."
+    title = call_deepseek(api_key, model, api_url, title_prompt)
+    title = title.strip().strip('"').strip("'")
+    print(f"Article title: {title}")
+
+    print("Generating article content...")
+    article_prompt = build_prompt(keyword, config)
+    article_html = call_deepseek(api_key, model, api_url, article_prompt)
+
+    filepath, content = build_markdown(title, keyword, article_html, config)
+
+    # Ensure content/posts directory exists
+    os.makedirs("content/posts", exist_ok=True)
+
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(content)
+
+    print(f"Saved to {filepath}")
+    print("Done!")
+
+if __name__ == "__main__":
+    main()
