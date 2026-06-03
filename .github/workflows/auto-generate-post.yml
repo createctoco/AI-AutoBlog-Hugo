@@ -1,172 +1,57 @@
-name: "AI-AutoBlog Hugo - Auto Generate Blog Post"
+name: Auto Generate Blog Post
 
 on:
   schedule:
-    # Runs at 3:00 AM UTC daily
-    - cron: "0 3 * * *"
-  workflow_dispatch:  # Manual trigger from GitHub UI
+    - cron: '0 3 * * *'  # 每天UTC凌晨3点（北京时间11点）自动生成1篇
+  workflow_dispatch:        # 允许手动触发
 
 permissions:
-  contents: write
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  contents: write          # 允许GitHub Actions写入仓库（提交新文章）
 
 jobs:
-  # ===========================================
-  # Job 1: Generate AI Blog Post
-  # ===========================================
-  generate-post:
+  generate:
     runs-on: ubuntu-latest
-    outputs:
-      has-new-post: ${{ steps.check.outputs.has_new_post }}
-
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v5
-
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: '0.145.0'
-          extended: true
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
           python-version: '3.13'
-          node-version: '24'
 
-      - name: Install dependencies
-        run: pip install requests pyyaml
+      - name: Install Python dependencies
+        run: pip install openai pyyaml
 
-      - name: Read config.yaml and pick keyword
-        id: config
-        run: |
-          python3 << 'EOF'
-          import yaml, os, glob
-
-          with open('config.yaml', 'r') as f:
-              config = yaml.safe_load(f)
-
-          keywords = config.get('keywords', [])
-          print(f"Found {len(keywords)} keywords")
-
-          # Read already used keywords from posts
-          existing = set()
-          for md in glob.glob('content/posts/*.md'):
-              with open(md, 'r') as f:
-                  for line in f:
-                      if line.startswith('keyword:'):
-                          val = line.split(':', 1)[1].strip().strip('"').strip("'")
-                          existing.add(val)
-
-          # Find next unused keyword
-          available = [k for k in keywords if k not in existing]
-          if not available:
-              available = keywords  # Start over if all used
-          keyword = available[0]
-
-          # Get settings
-          review = config.get('review_mode', False)
-          alibaba_store = config.get('alibaba_store_url', '')
-          auto_image = config.get('auto_image', True)
-
-          # Write outputs
-          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write(f"keyword={keyword}\n")
-              f.write(f"review={str(review).lower()}\n")
-              f.write(f"alibaba_store={alibaba_store}\n")
-              f.write(f"auto_image={str(auto_image).lower()}\n")
-          print(f"Selected keyword: {keyword}")
-          EOF
-
-      - name: Generate blog post with AI
+      - name: Generate blog post
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          AI_MODEL: ${{ secrets.AI_MODEL || 'deepseek-chat' }}
-          AI_BASE_URL: ${{ secrets.AI_BASE_URL || 'https://api.deepseek.com/v1' }}
-          KW: ${{ steps.config.outputs.keyword }}
-          ALIBABA_STORE: ${{ steps.config.outputs.alibaba_store }}
-          AUTO_IMAGE: ${{ steps.config.outputs.auto_image }}
-        run: python3 scripts/generate-post.py
+          AI_MODEL: ${{ secrets.AI_MODEL }}
+          AI_API_URL: ${{ secrets.AI_API_URL }}
+        run: python scripts/generate-post.py
 
-      - name: Check if new post was generated
-        id: check
+      - name: Commit and push new post
         run: |
-          if git diff --quiet content/posts/; then
-            echo "has_new_post=false" >> $GITHUB_OUTPUT
-            echo "No new post generated"
-          else
-            echo "has_new_post=true" >> $GITHUB_OUTPUT
-            echo "New post generated successfully"
-          fi
-
-      - name: Commit new post (auto-publish mode)
-        if: steps.check.outputs.has_new_post == 'true' && steps.config.outputs.review == 'false'
-        run: |
-          git config user.name "AI AutoBot"
-          git config user.email "autobot@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add content/posts/
-          git commit -m "AI: Generate new blog post - $(date +'%Y-%m-%d')" || echo "No changes to commit"
+          git commit -m "Auto generate blog post [skip ci]" || echo "No changes to commit"
           git push
 
-      - name: Create Pull Request (review mode)
-        if: steps.check.outputs.has_new_post == 'true' && steps.config.outputs.review == 'true'
-        uses: peter-evans/create-pull-request@v7
-        with:
-          title: "AI Generated Post - $(date +'%Y-%m-%d')"
-          body: "Automatically generated blog post. Please review before merging."
-          branch: "ai-post-$(date +'%Y%m%d')"
-          commit-message: "AI: Generate new blog post - $(date +'%Y-%m-%d')"
-
-  # ===========================================
-  # Job 2: Build Hugo Site & Deploy to Pages
-  # ===========================================
-  build-deploy:
-    needs: generate-post
-    if: always() && needs.generate-post.result == 'success'
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-        with:
-          submodules: true
-          ref: ${{ github.ref }}
-
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
+        uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: '0.145.0'
           extended: true
 
-      - name: Setup Python (for post-processing)
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.13'
-          node-version: '24'
-
-      - name: Install PaperMod theme
-        run: |
-          if [ ! -d "themes/PaperMod" ]; then
-            git clone https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
-          fi
-
       - name: Build Hugo site
         run: hugo --minify
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./public
-
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
