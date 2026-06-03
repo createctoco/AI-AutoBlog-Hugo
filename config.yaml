@@ -3,56 +3,45 @@ languageCode: "en-us"
 title: "Rosary Blog"
 theme: "PaperMod"
 
+# ---- 顶层，脚本直接读这些 ----
+keywords:
+  - "wholesale catholic rosary beads"
+  - "custom rosary beads bulk"
+  - "rosary beads factory price"
+  - "religious gifts wholesale"
+  - "catholic supplies distributor"
+  - "wooden rosary beads OEM"
+  - "rosary beads for church"
+  - "promotional rosary beads"
+  - "rosary beads import from China"
+  - "wholesale christian gifts"
+
+alibaba_store: "https://mecrt.en.alibaba.com/"
+alibaba_products:
+  - "https://www.alibaba.com/product-detail/Catholic-Rosary-Prayer-Beads-8-10mm_1601125568905.html"
+  - "https://www.alibaba.com/product-detail/Catholic-Rosary-Crucifix-Religious-Jewelry-Saint_1601126619552.html"
+  - "https://www.alibaba.com/product-detail/Catholic-Rosary-Necklace-Jesus-Cross-Pendant_1601127964579.html"
+  - "https://www.alibaba.com/product-detail/Catholic-Rosary-Prayer-Beads-8-10mm_1601629510892.html"
+  - "https://www.alibaba.com/product-detail/Rose-Fragrance-Wooden-Bead-6mm-Holy_1601140558861.html"
+  - "https://www.alibaba.com/product-detail/Catholic-Scapulars-Worship-Embroidery-Liturgical-Stole_1601321075842.html"
+
+cron: "0 3 * * *"
+
+# ---- params（Hugo 主题用）----
 params:
-  # SEO & Site Info
   description: "Wholesale Catholic rosary beads, Christian gifts, and religious articles directly from factory."
   author: "Rosary Factory"
-  
-  # Alibaba links - 改成你自己的！
-  alibaba:
-    store: "https://www.alibaba.com/store/your-store"
-    products:
-      - "https://www.alibaba.com/product-detail/rosary-beads-1"
-      - "https://www.alibaba.com/product-detail/rosary-beads-2"
-      - "https://www.alibaba.com/product-detail/rosary-beads-3"
-      - "https://www.alibaba.com/product-detail/rosary-beads-4"
-      - "https://www.alibaba.com/product-detail/rosary-beads-5"
-      - "https://www.alibaba.com/product-detail/rosary-beads-6"
-
-  # B2B Keywords for AI to pick from
-  keywords:
-    - "wholesale catholic rosary beads"
-    - "custom rosary beads bulk"
-    - "rosary beads factory price"
-    - "religious gifts wholesale"
-    - "catholic supplies distributor"
-    - "wooden rosary beads OEM"
-    - "rosary beads for church"
-    - "promotional rosary beads"
-    - "rosary beads import from China"
-    - "wholesale christian gifts"
-
-  # Cron schedule (UTC time)
-  cron: "0 3 * * *"
-
-# PaperMod theme settings
-params:
   ShowReadingTime: true
   ShowShareButtons: false
   ShowPostNavLinks: true
   ShowBreadCrumbs: true
   ShowCodeCopyButtons: true
   ShowWordCount: true
-  ShowRssButton: true
-  ShowTaxonomies: true
-  
-  # Homepage profile
   profileMode:
     enabled: true
     title: "Rosary Factory Blog"
-    subtitle: "Wholesale Catholic rosary beads & religious gifts directly from factory. B2B blog for churches, distributors, and retailers."
+    subtitle: "Wholesale Catholic rosary beads & religious gifts directly from factory."
     imageUrl: "https://via.placeholder.com/120"
-    imageTitle: "Rosary Factory"
     imageWidth: 120
     imageHeight: 120
     buttons:
