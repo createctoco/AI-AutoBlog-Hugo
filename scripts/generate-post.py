@@ -10,85 +10,26 @@ import re
 import random
 import yaml
 import requests
-from datetime import datetime
+from datetime import datetime, timezone
 
 # ============================================
-# Load Configuration (compatible with all formats)
+# Load Configuration
 # ============================================
 def load_config():
     with open("config.yaml", "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
-config = load_config()
-
-# Read keywords (support both top-level and params.keywords)
-def get_keywords(config):
-    kw = config.get("keywords", [])
-    if not kw:
-        kw = config.get("params", {}).get("keywords", [])
-    return kw
-
-keywords = get_keywords(config)
-
-# Read Alibaba store URL (support both underscore and dot notation)
-alibaba_store = config.get("alibaba_store_url", "")
-if not alibaba_store:
-    alibaba_store = config.get("alibaba", {}).get("store", "https://mecrt.en.alibaba.com/")
-
-# Read Alibaba product URLs (support ALL formats)
-def get_products(config):
-    products = []
-
-    # Format 1: alibaba_products: ["url1", "url2"]
-    raw1 = config.get("alibaba_products", [])
-    if raw1:
-        for p in raw1:
-            if isinstance(p, str):
-                products.append(p)
-            elif isinstance(p, dict) and "url" in p:
-                products.append(p["url"])
-
-    # Format 2: alibaba_product_urls: [{url: "...", anchor: "..."}, ...]
-    raw2 = config.get("alibaba_product_urls", [])
-    if raw2:
-        for p in raw2:
-            if isinstance(p, dict) and "url" in p:
-                products.append(p["url"])
-            elif isinstance(p, str):
-                products.append(p)
-
-    # Format 3: alibaba.products: ["url1", "url2"]
-    raw3 = config.get("alibaba", {}).get("products", [])
-    if raw3:
-        for p in raw3:
-            if isinstance(p, str):
-                products.append(p)
-
-    return products
-
-alibaba_products = get_products(config)
-
-# Pick 2-3 random product links for this article
-def pick_random_products(count=2):
-    if not alibaba_products:
-        return []
-    return random.sample(alibaba_products, min(count, len(alibaba_products)))
+def get_alibaba(config):
+    return {
+        "store": config.get("alibaba_store_url", ""),
+        "products": config.get("alibaba_products", [])
+    }
 
 # ============================================
-# AI API Configuration
+# Pick Keyword
 # ============================================
-api_key = os.environ.get("OPENAI_API_KEY", "")
-model = os.environ.get("AI_MODEL", "deepseek-chat")
-api_url = os.environ.get("AI_API_URL", "https://api.deepseek.com/v1").rstrip("/")
-
-if not api_key:
-    print("ERROR: OPENAI_API_KEY environment variable not set")
-    sys.exit(1)
-
-# ============================================
-# Find Next Unused Keyword
-# ============================================
-def pick_keyword():
+def pick_keyword(config):
+    keywords = config.get("keywords", [])
     if not keywords:
         print("ERROR: no keywords found in config.yaml")
         sys.exit(1)
@@ -118,7 +59,7 @@ def pick_keyword():
 # ============================================
 # Call DeepSeek API
 # ============================================
-def call_api(prompt, max_tokens=2000):
+def call_api(prompt, api_key, model, api_url):
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
@@ -127,20 +68,16 @@ def call_api(prompt, max_tokens=2000):
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.7,
-        "max_tokens": max_tokens,
+        "max_tokens": 2000
     }
-    try:
-        resp = requests.post(
-            f"{api_url}/chat/completions",
-            headers=headers,
-            json=payload,
-            timeout=90
-        )
-        resp.raise_for_status()
-        return resp.json()["choices"][0]["message"]["content"].strip()
-    except Exception as e:
-        print(f"ERROR calling AI API: {e}")
-        sys.exit(1)
+    resp = requests.post(
+        f"{api_url}/chat/completions",
+        headers=headers,
+        json=payload,
+        timeout=90
+    )
+    resp.raise_for_status()
+    return resp.json()["choices"][0]["message"]["content"]
 
 # ============================================
 # Build Prompts
@@ -148,12 +85,10 @@ def call_api(prompt, max_tokens=2000):
 def build_title_prompt(keyword):
     return f"Generate a short, SEO-friendly blog post title about: {keyword}. Output ONLY the title, nothing else."
 
-def build_article_prompt(keyword):
-    product_list = ""
-    if alibaba_products:
-        product_list = "\nNaturally mention 2-3 of these Alibaba product links in the body:\n"
-        for url in alibaba_products[:6]:
-            product_list += f"  - {url}\n"
+def build_article_prompt(keyword, alibaba):
+    products = alibaba["products"]
+    store = alibaba["store"]
+    product_list = "\n".join([f"  - {p}" for p in products]) if products else ""
 
     return f"""You are a B2B SEO content writer for a Catholic rosary beads factory.
 
@@ -163,17 +98,18 @@ Requirements:
 - Professional B2B English, targeting wholesale buyers, importers, church procurement
 - Include a proper title as <h1>...</h1>
 - Use <h2> and <h3> subheadings
-- {product_list}
+- Output in clean HTML (use <p>, <ul>, <li>, <h2>, <h3> tags)
+- Naturally mention 2-3 Alibaba product links in the body (use these if available):
+{product_list}
 - End with a short conclusion
-- Do NOT include meta description or JSON-LD (I will add them separately)
+- Do NOT include meta description or JSON-LD
 - Tone: informative, trust-building, suitable for B2B wholesale buyers
 
-Output the article in clean HTML format (use <h1>, <h2>, <h3>, <p>, <ul>, <li> tags where appropriate).
-Output ONLY the article, no preamble.
+Output the article in HTML format. Output ONLY the article, no preamble.
 """
 
 # ============================================
-# Helpers
+# Parse Title
 # ============================================
 def extract_title(html):
     match = re.search(r'<h1[^>]*>(.*?)</h1>', html, re.IGNORECASE | re.DOTALL)
@@ -192,14 +128,19 @@ def slugify(text):
     slug = re.sub(r'[\s-]+', '-', slug)
     return slug[:60].strip('-')
 
-def build_markdown(title, keyword, article_html):
+# ============================================
+# Build Markdown File Content
+# ============================================
+def build_markdown(title, keyword, article_html, alibaba):
     today = datetime.now().strftime("%Y-%m-%d")
     slug = slugify(title)
     filepath = f"content/posts/{today}-{slug}.md"
 
-    products = pick_random_products(2)
+    store = alibaba["store"]
+    products = alibaba["products"]
+    random_links = random.sample(products, min(2, len(products))) if products else []
 
-    # JSON-LD FAQ Schema
+    # JSON-LD FAQ
     faq = """<script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -226,9 +167,9 @@ def build_markdown(title, keyword, article_html):
 </script>"""
 
     # CTA block
-    cta = f"> **Looking for wholesale rosary beads?**  \n"
-    cta += f"> Visit our Alibaba store: [{alibaba_store}]({alibaba_store})  \n"
-    for link in products:
+    cta = "> **Looking for wholesale rosary beads?**  \n"
+    cta += f"> Visit our Alibaba store: [{store}]({store})  \n"
+    for link in random_links:
         cta += f"> View product: [{link}]({link})  \n"
 
     content = f"""---
@@ -255,22 +196,31 @@ categories: ["Rosary Beads"]
 # Main Flow
 # ============================================
 def main():
-    keyword = pick_keyword()
+    config = load_config()
+    keyword = pick_keyword(config)
 
-    # Generate title
+    api_key = os.environ.get("OPENAI_API_KEY", "")
+    model = os.environ.get("AI_MODEL", "deepseek-chat")
+    api_url = os.environ.get("AI_API_URL", "https://api.deepseek.com/v1")
+
+    if not api_key:
+        print("ERROR: OPENAI_API_KEY environment variable not set")
+        sys.exit(1)
+
+    # 1. Generate title
     print("Generating title...")
-    title_raw = call_api(build_title_prompt(keyword), max_tokens=100)
+    title_raw = call_api(build_title_prompt(keyword), api_key, model, api_url)
     title = title_raw.strip().strip('"').strip("'")
     print(f"Title: {title}")
 
-    # Generate article
-    print("Generating article content...")
-    article_html = call_api(build_article_prompt(keyword), max_tokens=3000)
-    print("Article generated successfully.")
+    # 2. Generate article
+    print("Generating article...")
+    alibaba = get_alibaba(config)
+    article_html = call_api(build_article_prompt(keyword, alibaba), api_key, model, api_url)
 
-    # Save
+    # 3. Save file
     os.makedirs("content/posts", exist_ok=True)
-    filepath, content = build_markdown(title, keyword, article_html)
+    filepath, content = build_markdown(title, keyword, article_html, alibaba)
 
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(content)
