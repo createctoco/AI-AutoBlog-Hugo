@@ -1,22 +1,28 @@
+# AI-AutoBlog Hugo - Catholic Religious Gifts Auto Blog
+# Powered by DeepSeek API + Hugo + GitHub Pages
+
 baseURL: "https://createctoco.github.io/rosary/"
 languageCode: "en-us"
-title: "Rosary Blog"
+title: "Catholic Religious Gifts Guide"
 theme: "PaperMod"
+enableGitInfo: false
 
-# ---- 顶层，脚本直接读这些 ----
-keywords:
-  - "wholesale catholic rosary beads"
-  - "custom rosary beads bulk"
-  - "rosary beads factory price"
-  - "religious gifts wholesale"
-  - "catholic supplies distributor"
-  - "wooden rosary beads OEM"
-  - "rosary beads for church"
-  - "promotional rosary beads"
-  - "rosary beads import from China"
-  - "wholesale christian gifts"
+# ============================================
+# MARKUP SETTINGS (allow HTML in content)
+# ============================================
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
 
-alibaba_store: "https://mecrt.en.alibaba.com/"
+ignoreLogs:
+  - warning-goldmark-raw-html
+
+# ============================================
+# ALIBABA STORE LINKS (Traffic 引流)
+# ============================================
+alibaba_store_url: "https://mecrt.en.alibaba.com/"
+
 alibaba_products:
   - "https://www.alibaba.com/product-detail/Catholic-Rosary-Prayer-Beads-8-10mm_1601125568905.html"
   - "https://www.alibaba.com/product-detail/Catholic-Rosary-Crucifix-Religious-Jewelry-Saint_1601126619552.html"
@@ -25,27 +31,62 @@ alibaba_products:
   - "https://www.alibaba.com/product-detail/Rose-Fragrance-Wooden-Bead-6mm-Holy_1601140558861.html"
   - "https://www.alibaba.com/product-detail/Catholic-Scapulars-Worship-Embroidery-Liturgical-Stole_1601321075842.html"
 
-cron: "0 3 * * *"
+# ============================================
+# KEYWORDS (B2B Wholesale Long-tail Terms)
+# ============================================
+keywords:
+  - "wholesale catholic rosary beads"
+  - "how to choose catholic rosary beads for beginners"
+  - "catholic rosary bead materials comparison"
+  - "best wood for catholic rosary beads"
+  - "wholesale wooden rosary beads bulk"
+  - "custom catholic rosary beads OEM"
+  - "how to pray the catholic rosary step by step"
+  - "wholesale christian cross pendant"
+  - "wooden cross pendant vs metal cross"
+  - "custom metal crucifix OEM manufacturer"
+  - "bulk religious cross necklace wholesale"
+  - "islamic prayer beads 99 tasbih guide"
+  - "wholesale misbaha prayer beads supplier"
+  - "catholic religious gifts wholesale supplier"
+  - "church supply religious items bulk order"
+  - "catholic religious goods manufacturer China"
+  - "OEM religious jewelry factory direct"
+  - "import religious items from China guide"
 
-# ---- params（Hugo 主题用）----
+# ============================================
+# PARAMS (Hugo Theme - PaperMod)
+# ============================================
 params:
-  description: "Wholesale Catholic rosary beads, Christian gifts, and religious articles directly from factory."
-  author: "Rosary Factory"
+  env: production
+  author: "CTOCO Religious Gifts"
+  defaultTheme: auto
   ShowReadingTime: true
   ShowShareButtons: false
   ShowPostNavLinks: true
   ShowBreadCrumbs: true
-  ShowCodeCopyButtons: true
+  ShowCodeCopyButtons: false
   ShowWordCount: true
-  profileMode:
-    enabled: true
-    title: "Rosary Factory Blog"
-    subtitle: "Wholesale Catholic rosary beads & religious gifts directly from factory."
-    imageUrl: "https://via.placeholder.com/120"
-    imageWidth: 120
-    imageHeight: 120
-    buttons:
-      - name: "Visit Alibaba Store"
-        url: "https://www.alibaba.com/store/your-store"
-      - name: "RSS Feed"
-        url: "index.xml"
+  ShowToc: false
+
+  homeInfoParams:
+    Title: "Catholic Religious Gifts & Rosary Beads Guide"
+    Content: "Your trusted source for wholesale catholic rosary beads, crucifix pendants, religious medals, and church supplies."
+
+  socialIcons:
+    - name: "alibaba"
+      url: "https://mecrt.en.alibaba.com/"
+    - name: "facebook"
+      url: "https://facebook.com/ctoco"
+
+# ============================================
+# MENU (Sidebar)
+# ============================================
+menu:
+  sidebar:
+    - name: "Home"
+      url: "/"
+      weight: 1
+    - name: "Alibaba Store"
+      url: "https://mecrt.en.alibaba.com/"
+      weight: 2
