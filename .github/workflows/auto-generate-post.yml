@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -25,24 +25,39 @@ jobs:
       - name: Install Python dependencies
         run: pip install requests pyyaml
 
-      - name: Read config and pick keyword
-        id: config
+      - name: Generate blog post
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          AI_MODEL: ${{ secrets.AI_MODEL }}
+          AI_API_URL: ${{ secrets.AI_API_URL }}
+        run: python scripts/generate-post.py
+
+      - name: Commit and push new post
         run: |
-          python3 << 'EOF'
-          import yaml, os, glob
-          with open('config.yaml', 'r') as f:
-              config = yaml.safe_load(f)
-          keywords = config.get('keywords', [])
-          existing = set()
-          for md in glob.glob('content/posts/*.md'):
-              with open(md, 'r') as f:
-                  for line in f:
-                      if line.startswith('keyword:'):
-                          val = line.split(':', 1)[1].strip().strip('"').strip("'")
-                          existing.add(val)
-          available = [k for k in keywords if k not in existing]
-          if not available:
-              available = keywords
-          keyword = available[0]
-          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add content/posts/
+          git commit -m "Auto generate blog post [skip ci]" || echo "No changes to commit"
+          git push
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.145.0'
+          extended: true
+
+      - name: Install PaperMod theme
+        run: |
+          if [ ! -d "themes/PaperMod" ]; then
+            git clone https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
+          fi
+
+      - name: Build Hugo site
+        run: hugo --minify
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
