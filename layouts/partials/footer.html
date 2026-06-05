@@ -1,6 +1,6 @@
 {{- /* Footer override: adds footer menu row + nofollow on outbound links */ -}}
 <footer class="py-6 sm:py-8 lg:py-10">
-  <div class="mx-auto max-w-3xl px-4 lg:px-6 overflow-x-clip">
+  <div class="relative mx-auto max-w-3xl px-4 lg:px-6 overflow-x-clip">
 
     {{- /* Footer menu row */ -}}
     <nav class="mb-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
@@ -24,15 +24,15 @@
     </nav>
 
     {{- /* Copyright */ -}}
-    <div class="text-center text-xs text-neutral-500 dark:text-neutral-400 mb-2">
+    <div class="text-center text-xs text-neutral-500 dark:text-neutral-400">
       © {{ now.Year }}
       {{ if site.Params.copyright }}
       {{ site.Params.copyright | safeHTML }}
       {{ end }}
     </div>
 
-    {{- /* Powered by */ -}}
-    <div class="text-center text-xs text-neutral-400 dark:text-neutral-500">
+    {{- /* Powered by - bottom right, small, subtle */ -}}
+    <div class="mt-1 text-right text-[11px] text-neutral-400/50 dark:text-neutral-500/50">
       Powered by
       <a href="https://gohugo.io"
          target="_blank" rel="nofollow noopener noreferrer"

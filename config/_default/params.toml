@@ -6,7 +6,7 @@ enableCodeCopy = false
 mainSections = ["posts"]
 smartTOC = true
 brandName = "RosarySupply.com"
-copyright = "[CTOCO-Catholic Rosary](https://ctoco.com/)"
+copyright = "<a href='https://ctoco.com/'>CTOCO-Catholic Rosary</a>"
 
 [homepage]
 layout = "background"
