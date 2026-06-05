@@ -5,8 +5,8 @@ draft: false
 keyword: "wholesale christian cross pendant"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "/images/20260605154217-pexels.jpg"
-thumbnail: "/images/20260605154217-pexels.jpg"
+featureimage: "images/20260605154217-pexels.jpg"
+thumbnail: "images/20260605154217-pexels.jpg"
 ---
 
 <script type="application/ld+json">

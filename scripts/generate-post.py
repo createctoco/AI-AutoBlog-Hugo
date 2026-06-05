@@ -104,18 +104,18 @@ def fetch_pexels_image(keyword, api_key):
                 img_response = requests.get(image_url, timeout=30)
                 img_response.raise_for_status()
 
-                # Save to static/images/
-                os.makedirs("static/images", exist_ok=True)
+                # Save to assets/images/ (Blowfish uses resources.Get which reads from assets/)
+                os.makedirs("assets/images", exist_ok=True)
                 timestamp = datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')
                 filename = f"{timestamp}-pexels.jpg"
-                filepath = f"static/images/{filename}"
+                filepath = f"assets/images/{filename}"
 
                 with open(filepath, "wb") as f:
                     f.write(img_response.content)
 
                 photographer = photo.get("photographer", "Pexels")
                 print(f"Pexels image saved: {filepath} (by {photographer})")
-                return f"/images/{filename}"
+                return f"images/{filename}"
 
         except Exception as e:
             print(f"Warning: Pexels search failed for '{search_term}': {e}")
@@ -150,16 +150,16 @@ def fetch_local_fallback_image():
     basename = os.path.basename(chosen)
     print(f"Using local fallback image: {basename}")
 
-    # Copy to static/images/ with a unique name
-    os.makedirs("static/images", exist_ok=True)
+    # Copy to assets/images/ with a unique name
+    os.makedirs("assets/images", exist_ok=True)
     timestamp = datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')
     ext = os.path.splitext(chosen)[1].lower()
     filename = f"{timestamp}-local{ext}"
-    dest = f"static/images/{filename}"
+    dest = f"assets/images/{filename}"
 
     shutil.copy2(chosen, dest)
     print(f"Local image copied to: {dest}")
-    return f"/images/{filename}"
+    return f"images/{filename}"
 
 # ============================================
 # Get Featured Image (Pexels first, local fallback)

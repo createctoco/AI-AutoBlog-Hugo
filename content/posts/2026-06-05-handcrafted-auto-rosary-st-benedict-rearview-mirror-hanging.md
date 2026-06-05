@@ -5,8 +5,8 @@ draft: false
 keyword: "Rearview mirror hanging auto rosary st benedict design"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "/images/20260605155051-pexels.jpg"
-thumbnail: "/images/20260605155051-pexels.jpg"
+featureimage: "images/20260605155051-pexels.jpg"
+thumbnail: "images/20260605155051-pexels.jpg"
 ---
 
 <script type="application/ld+json">

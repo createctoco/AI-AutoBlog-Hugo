@@ -11,7 +11,7 @@ on:
     branches: [main]
     paths-ignore:
       - 'content/posts/**'
-      - 'static/images/**'
+      - 'assets/images/**'
 
 permissions:
   contents: write
@@ -35,7 +35,7 @@ jobs:
         run: pip install requests pyyaml
 
       - name: Create directories
-        run: mkdir -p content/posts static/images
+        run: mkdir -p content/posts assets/images
 
       - name: Generate blog post
         env:
@@ -49,7 +49,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add content/posts/ static/images/
+          git add content/posts/ assets/images/
           git commit -m "Auto generate blog post [skip ci]" || echo "No changes to commit"
           git push
 

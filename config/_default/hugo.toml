@@ -3,7 +3,6 @@ languageCode = "en-us"
 title = "Catholic Religious Gifts Guide"
 theme = "blowfish"
 enableGitInfo = false
-copyright = "© 2026 [CTOCO-Catholic Rosary](https://ctoco.com/)"
 
 [markup.goldmark.renderer]
 unsafe = true

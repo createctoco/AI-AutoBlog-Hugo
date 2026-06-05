@@ -5,6 +5,7 @@ enableSearch = true
 enableCodeCopy = false
 mainSections = ["posts"]
 smartTOC = true
+copyright = "© { year } [CTOCO-Catholic Rosary](https://ctoco.com/)"
 
 [homepage]
 layout = "background"
