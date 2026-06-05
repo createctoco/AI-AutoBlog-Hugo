@@ -128,8 +128,11 @@ def fetch_pexels_image(keyword, api_key):
 # Fallback: Random Image from Local images/ Folder
 # ============================================
 def fetch_local_fallback_image():
-    """Pick a random image from the repo's images/ folder as fallback when Pexels API fails"""
-    images_dir = "images"
+    """Pick a random image from assets/images/ folder as fallback when Pexels API fails"""
+    images_dir = "assets/images"
+    if not os.path.exists(images_dir):
+        # Try fallback to images/ at repo root
+        images_dir = "images"
     if not os.path.exists(images_dir):
         print("No local images/ folder found, skipping fallback")
         return None
