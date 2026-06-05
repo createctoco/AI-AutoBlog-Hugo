@@ -1,41 +1,43 @@
-{{/* Override: use params.brandName for header text, independent of site.Title (browser tab title) */}}
-<div class="main-menu flex items-center w-full gap-2 p-1 pl-0">
-  {{ if .Site.Params.Logo }}
-    {{ $logo := resources.Get .Site.Params.Logo }}
-    {{ if $logo }}
-      <div>
-        <a href="{{ "" | relLangURL }}" class="flex">
-          <span class="sr-only">{{ .Site.Title | markdownify }}</span>
-          {{ if eq $logo.MediaType.SubType "svg" }}
-            <span class="logo object-scale-down object-left nozoom">
-              {{ $logo.Content | safeHTML }}
-            </span>
-          {{ else }}
-            <img
-              src="{{ $logo.RelPermalink }}"
-              width="{{ div $logo.Width 2 }}"
-              height="{{ div $logo.Height 2 }}"
-              class="logo max-h-20 max-w-20 object-scale-down object-left nozoom"
-              alt="">
-          {{ end }}
-        </a>
-      </div>
+{{/* Override: sticky thin header bar with light gray background */}}
+<header class="sticky top-0 z-50 bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700 shadow-sm">
+  <div class="main-menu flex items-center w-full gap-2 py-1 px-2">
+    {{ if .Site.Params.Logo }}
+      {{ $logo := resources.Get .Site.Params.Logo }}
+      {{ if $logo }}
+        <div>
+          <a href="{{ "" | relLangURL }}" class="flex">
+            <span class="sr-only">{{ .Site.Title | markdownify }}</span>
+            {{ if eq $logo.MediaType.SubType "svg" }}
+              <span class="logo object-scale-down object-left nozoom">
+                {{ $logo.Content | safeHTML }}
+              </span>
+            {{ else }}
+              <img
+                src="{{ $logo.RelPermalink }}"
+                width="{{ div $logo.Width 2 }}"
+                height="{{ div $logo.Height 2 }}"
+                class="logo max-h-20 max-w-20 object-scale-down object-left nozoom"
+                alt="">
+            {{ end }}
+          </a>
+        </div>
+      {{ end }}
     {{ end }}
-  {{ end }}
-  {{ if not .Site.Params.disableTextInHeader | default true }}
-    <a href="{{ "" | relLangURL }}" class="text-base truncate min-w-0 shrink">
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ site.Params.brandName | default .Site.Title | safeHTML }}
-    </a>
-  {{ end }}
-  <div class="flex items-center ms-auto">
-    <div class="hidden md:flex">
-      {{ partial "header/components/desktop-menu.html" . }}
-    </div>
-    <div class="flex md:hidden">
-      {{ partial "header/components/mobile-menu.html" . }}
+    {{ if not .Site.Params.disableTextInHeader | default true }}
+      <a href="{{ "" | relLangURL }}" class="text-base truncate min-w-0 shrink">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ site.Params.brandName | default .Site.Title | safeHTML }}
+      </a>
+    {{ end }}
+    <div class="flex items-center ms-auto">
+      <div class="hidden md:flex">
+        {{ partial "header/components/desktop-menu.html" . }}
+      </div>
+      <div class="flex md:hidden">
+        {{ partial "header/components/mobile-menu.html" . }}
+      </div>
     </div>
   </div>
-</div>
+</header>
 
 {{ if .Site.Menus.subnavigation }}
   <div
