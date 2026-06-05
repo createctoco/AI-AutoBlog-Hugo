@@ -1,20 +1,28 @@
-{{- /* Custom TOC override with Alibaba sidebar */ -}}
+{{- /* Custom TOC override with Alibaba sidebar - always shows sidebar content */ -}}
+{{- $enableToc := .enableToc | default true -}}
+{{- $hasTocContent := .hasTocContent | default false -}}
+{{- $tocHTML := .TOC | default "" -}}
+
+{{- /* Desktop: right sidebar with TOC + Alibaba links */ -}}
 <details
   open
   id="TOCView"
   class="toc-right mt-0 overflow-y-auto overscroll-contain bf-scrollbar rounded-lg -ms-5 ps-5 pe-2 hidden lg:block">
+  {{- if and $enableToc $hasTocContent -}}
   <summary
     class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 -ms-5 ps-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
     {{ i18n "article.table_of_contents" }}
   </summary>
   <div
     class="min-w-[220px] py-2 border-dotted border-s-1 -ms-5 ps-5 dark:border-neutral-600">
-    {{ .TableOfContents | emojify }}
+    {{ $tocHTML | safeHTML }}
   </div>
-  {{- /* Alibaba Products Sidebar */ -}}
-  <div class="mt-4 pt-4 border-t border-neutral-300 dark:border-neutral-600 -ms-5 ps-5">
+  {{- end -}}
+
+  {{- /* Alibaba Products Sidebar — always visible */ -}}
+  <div class="{{ if and $enableToc $hasTocContent }}mt-4 pt-4 border-t border-neutral-300 dark:border-neutral-600{{ end }} -ms-5 ps-5">
     <h4 class="text-sm font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-3">
-      {{ i18n "article.related_products" | default "Our Products" }}
+      Our Products
     </h4>
     <a href="https://mecrt.en.alibaba.com/"
        target="_blank" rel="noopener noreferrer"
@@ -49,6 +57,8 @@
   </div>
 </details>
 
+{{- /* Mobile: collapsible TOC (only if content exists) */ -}}
+{{- if and $enableToc $hasTocContent -}}
 <details class="toc-inside mt-0 overflow-hidden rounded-lg -ms-5 ps-5 lg:hidden">
   <summary
     class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 -ms-5 ps-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
@@ -56,11 +66,34 @@
   </summary>
   <div
     class="py-2 border-dotted border-neutral-300 border-s-1 -ms-5 ps-5 dark:border-neutral-600">
-    {{ .TableOfContents | emojify }}
+    {{ $tocHTML | safeHTML }}
   </div>
 </details>
+{{- end -}}
 
-{{ if .Site.Params.smartTOC }}
+{{- /* Mobile: Alibaba links (always visible on mobile, inside article flow) */ -}}
+<div class="mt-4 pt-4 border-t border-neutral-300 dark:border-neutral-600 lg:hidden">
+  <h4 class="text-sm font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2">
+    Our Products
+  </h4>
+  <a href="https://mecrt.en.alibaba.com/"
+     target="_blank" rel="noopener noreferrer"
+     class="inline-flex items-center gap-1.5 px-3 py-1.5 mb-2 mr-2 rounded-full bg-primary-100 dark:bg-primary-900 text-xs font-medium no-underline hover:bg-primary-200 dark:hover:bg-primary-800 transition-colors">
+    <span>🏪</span> Mecrt Store
+  </a>
+  <a href="https://www.alibaba.com/product-detail/Catholic-Rosary-Prayer-Beads-8-10mm_1601125568905.html"
+     target="_blank" rel="noopener noreferrer"
+     class="inline-flex items-center gap-1.5 px-3 py-1.5 mb-2 mr-2 rounded-full bg-neutral-100 dark:bg-neutral-700 text-xs font-medium no-underline hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors">
+    <span>📿</span> Rosary Beads
+  </a>
+  <a href="https://www.alibaba.com/product-detail/Catholic-Rosary-Crucifix-Religious-Jewelry-Saint_1601126619552.html"
+     target="_blank" rel="noopener noreferrer"
+     class="inline-flex items-center gap-1.5 px-3 py-1.5 mb-2 mr-2 rounded-full bg-neutral-100 dark:bg-neutral-700 text-xs font-medium no-underline hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors">
+    <span>✝️</span> Crucifix Medal
+  </a>
+</div>
+
+{{ if site.Params.smartTOC }}
 <script>
   (function () {
     'use strict'
