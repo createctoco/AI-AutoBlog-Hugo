@@ -23,7 +23,7 @@ jobs:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -47,13 +47,18 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # 先拉取最新代码，避免后续 rebase 冲突
+          git pull --rebase origin main || git reset --hard origin/main
+
           git add content/posts/
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
             git commit -m "Auto generate blog post [skip ci]"
+            # 已经是最新，直接 push（最多重试5次）
             for i in 1 2 3 4 5; do
-              git pull --rebase origin main && git push && break
+              git push && break
               if [ $i -eq 5 ]; then
                 echo "All push attempts failed, resetting to origin/main"
                 git reset --hard origin/main
@@ -78,7 +83,7 @@ jobs:
           git clone --depth 1 https://github.com/nunocoracao/blowfish.git themes/blowfish
 
       - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
+        uses: peaceiris/actions-hugo@v4
         with:
           hugo-version: '0.161.0'
           extended: true
@@ -87,7 +92,7 @@ jobs:
         run: hugo --minify
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@v5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
