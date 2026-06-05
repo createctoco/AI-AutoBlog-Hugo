@@ -136,44 +136,22 @@ def fetch_local_fallback_image():
     return f"images/{basename}"  # Hugo serves static/images/ at /images/
 
 
-    # Supported image extensions
-    extensions = ('*.jpg', '*.jpeg', '*.png', '*.webp', '*.gif')
-    image_files = []
-    for ext in extensions:
-        image_files.extend(glob.glob(os.path.join(images_dir, ext)))
-        image_files.extend(glob.glob(os.path.join(images_dir, ext.upper())))
-
-    if not image_files:
-        print("No images found in images/ folder, skipping fallback")
-        return None
-
-    # Pick a random image
-    chosen = random.choice(image_files)
-    basename = os.path.basename(chosen)
-    print(f"Using local fallback image: {basename}")
-
-    # Copy to assets/images/ with a unique name
-    os.makedirs("assets/images", exist_ok=True)
-    timestamp = datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')
-    ext = os.path.splitext(chosen)[1].lower()
-    filename = f"{timestamp}-local{ext}"
-    dest = f"assets/images/{filename}"
-
-    shutil.copy2(chosen, dest)
-    print(f"Local image copied to: {dest}")
-    return f"images/{filename}"
-
 # ============================================
 # Get Featured Image (Pexels first, local fallback)
 # ============================================
 def get_featured_image(keyword, pexels_api_key):
-    """Try Pexels API only; return None if fails (no local fallback)"""
+    """Try Pexels API first; fallback to local random image if fails"""
     image_url = fetch_pexels_image(keyword, pexels_api_key)
     if image_url:
         return image_url
 
-    print("Warning: Pexels failed, no feature image will be set for this post")
-    return None  # No featureimage = article works fine without hero image
+    print("Pexels failed, trying local images/ fallback...")
+    local_image = fetch_local_fallback_image()
+    if local_image:
+        return local_image
+
+    print("Warning: no feature image available for this post")
+    return None
 
 # ============================================
 # Call DeepSeek API
