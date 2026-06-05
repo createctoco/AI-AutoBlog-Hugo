@@ -27,6 +27,7 @@ showTaxonomies = true
 showHero = true
 heroStyle = "background"
 showTableOfContents = true
+hotlinkFeatureImage = true
 
 [list]
 showSummary = true

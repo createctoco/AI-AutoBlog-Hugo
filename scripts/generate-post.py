@@ -13,7 +13,6 @@ import os
 import sys
 import re
 import random
-import shutil
 import glob
 import yaml
 import requests
@@ -69,7 +68,7 @@ def pick_keyword(config):
 # Fetch Featured Image from Pexels API
 # ============================================
 def fetch_pexels_image(keyword, api_key):
-    """Try to fetch a relevant image from Pexels API"""
+    """Fetch a Pexels image URL (no local download, avoid repo bloat)"""
     if not api_key:
         print("No Pexels API key provided, skipping Pexels")
         return None
@@ -96,26 +95,11 @@ def fetch_pexels_image(keyword, api_key):
             data = response.json()
 
             if data.get("photos"):
-                # Pick a random image from top results
                 photo = random.choice(data["photos"])
                 image_url = photo["src"]["large2x"]
-
-                # Download the image
-                img_response = requests.get(image_url, timeout=30)
-                img_response.raise_for_status()
-
-                # Save to assets/images/ (Blowfish uses resources.Get which reads from assets/)
-                os.makedirs("assets/images", exist_ok=True)
-                timestamp = datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')
-                filename = f"{timestamp}-pexels.jpg"
-                filepath = f"assets/images/{filename}"
-
-                with open(filepath, "wb") as f:
-                    f.write(img_response.content)
-
                 photographer = photo.get("photographer", "Pexels")
-                print(f"Pexels image saved: {filepath} (by {photographer})")
-                return f"images/{filename}"
+                print(f"Pexels image URL: {image_url} (by {photographer})")
+                return image_url  # Return URL directly, no local download
 
         except Exception as e:
             print(f"Warning: Pexels search failed for '{search_term}': {e}")
@@ -128,14 +112,29 @@ def fetch_pexels_image(keyword, api_key):
 # Fallback: Random Image from Local images/ Folder
 # ============================================
 def fetch_local_fallback_image():
-    """Pick a random image from assets/images/ folder as fallback when Pexels API fails"""
-    images_dir = "assets/images"
+    """Pick a random image from static/images/ (no copy, avoid repo bloat)"""
+    images_dir = "static/images"
     if not os.path.exists(images_dir):
-        # Try fallback to images/ at repo root
         images_dir = "images"
     if not os.path.exists(images_dir):
         print("No local images/ folder found, skipping fallback")
         return None
+
+    extensions = ('*.jpg', '*.jpeg', '*.png', '*.webp', '*.gif')
+    image_files = []
+    for ext in extensions:
+        image_files.extend(glob.glob(os.path.join(images_dir, ext)))
+        image_files.extend(glob.glob(os.path.join(images_dir, ext.upper())))
+
+    if not image_files:
+        print("No images found in images/ folder, skipping fallback")
+        return None
+
+    chosen = random.choice(image_files)
+    basename = os.path.basename(chosen)
+    print(f"Local fallback image: {basename}")
+    return f"images/{basename}"  # Hugo serves static/images/ at /images/
+
 
     # Supported image extensions
     extensions = ('*.jpg', '*.jpeg', '*.png', '*.webp', '*.gif')
@@ -168,21 +167,13 @@ def fetch_local_fallback_image():
 # Get Featured Image (Pexels first, local fallback)
 # ============================================
 def get_featured_image(keyword, pexels_api_key):
-    """Try Pexels API first, fall back to local images/ folder"""
-    # 1. Try Pexels API
-    image_path = fetch_pexels_image(keyword, pexels_api_key)
-    if image_path:
-        return image_path
+    """Try Pexels API only; return None if fails (no local fallback)"""
+    image_url = fetch_pexels_image(keyword, pexels_api_key)
+    if image_url:
+        return image_url
 
-    # 2. Fallback to local images/ folder
-    print("Pexels failed or unavailable, using local fallback from images/ folder...")
-    image_path = fetch_local_fallback_image()
-    if image_path:
-        return image_path
-
-    # 3. No image at all
-    print("Warning: No featured image available for this post")
-    return None
+    print("Warning: Pexels failed, no feature image will be set for this post")
+    return None  # No featureimage = article works fine without hero image
 
 # ============================================
 # Call DeepSeek API
