@@ -1,6 +1,6 @@
 {{/* Override: sticky thin header bar, full-width深色背景 */}}
 <header class="sticky top-0 z-50 bg-neutral-100 dark:bg-neutral-800 border-b border-neutral-300 dark:border-neutral-600 shadow-sm">
-  <div class="main-menu flex items-center w-full gap-2 py-1 px-4 container mx-auto">
+  <div class="main-menu flex items-center w-full gap-2 py-px px-4">
     {{ if .Site.Params.Logo }}
       {{ $logo := resources.Get .Site.Params.Logo }}
       {{ if $logo }}
@@ -16,7 +16,7 @@
                 src="{{ $logo.RelPermalink }}"
                 width="{{ div $logo.Width 2 }}"
                 height="{{ div $logo.Height 2 }}"
-                class="logo max-h-20 max-w-20 object-scale-down object-left nozoom"
+                class="logo max-h-8 max-w-8 object-scale-down object-left nozoom"
                 alt="">
             {{ end }}
           </a>
