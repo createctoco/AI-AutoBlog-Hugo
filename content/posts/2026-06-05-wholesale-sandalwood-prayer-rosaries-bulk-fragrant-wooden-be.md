@@ -5,8 +5,7 @@ draft: false
 keyword: "Sandalwood fragrant wooden prayer rosary bulk wholesale"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605185412-pexels.jpg"
-thumbnail: "images/20260605185412-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

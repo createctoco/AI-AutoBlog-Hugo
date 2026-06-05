@@ -5,8 +5,7 @@ draft: false
 keyword: "import religious items from China guide"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605181635-pexels.jpg"
-thumbnail: "images/20260605181635-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

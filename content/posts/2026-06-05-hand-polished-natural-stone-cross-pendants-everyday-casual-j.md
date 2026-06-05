@@ -5,8 +5,7 @@ draft: false
 keyword: "Hand polished natural stone cross pendant casual daily jewelry bulk"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605173325-pexels.jpg"
-thumbnail: "images/20260605173325-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

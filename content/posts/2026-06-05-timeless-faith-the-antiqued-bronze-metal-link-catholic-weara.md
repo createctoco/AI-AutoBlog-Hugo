@@ -5,8 +5,7 @@ draft: false
 keyword: "Antiqued bronze metal link catholic wearable rosary"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605192742-pexels.jpg"
-thumbnail: "images/20260605192742-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

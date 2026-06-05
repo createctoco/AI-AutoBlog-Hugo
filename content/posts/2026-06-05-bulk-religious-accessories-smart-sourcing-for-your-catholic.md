@@ -5,8 +5,7 @@ draft: false
 keyword: "Catholic church bulk sourcing religious accessories"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605194201-pexels.jpg"
-thumbnail: "images/20260605194201-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

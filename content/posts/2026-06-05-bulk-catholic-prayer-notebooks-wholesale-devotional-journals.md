@@ -5,8 +5,7 @@ draft: false
 keyword: "Wholesale catholic devotional journal prayer notebook bulk church supply"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605192603-pexels.jpg"
-thumbnail: "images/20260605192603-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

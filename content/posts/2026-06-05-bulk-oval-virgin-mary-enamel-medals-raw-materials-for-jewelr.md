@@ -5,8 +5,7 @@ draft: false
 keyword: "Bulk oval shaped virgin mary enamel medal jewelry raw material"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "https://images.pexels.com/photos/11874168/pexels-photo-11874168.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-thumbnail: "https://images.pexels.com/photos/11874168/pexels-photo-11874168.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+
 ---
 
 <script type="application/ld+json">

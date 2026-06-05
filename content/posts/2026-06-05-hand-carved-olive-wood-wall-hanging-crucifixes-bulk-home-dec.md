@@ -5,8 +5,7 @@ draft: false
 keyword: "Hand carved olive wood wall hanging crucifix home decor bulk"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605174212-pexels.jpg"
-thumbnail: "images/20260605174212-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

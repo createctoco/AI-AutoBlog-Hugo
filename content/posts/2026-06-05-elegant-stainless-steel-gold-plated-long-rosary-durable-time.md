@@ -5,8 +5,7 @@ draft: false
 keyword: "Stainless steel gold plated long rosary"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605190513-pexels.jpg"
-thumbnail: "images/20260605190513-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

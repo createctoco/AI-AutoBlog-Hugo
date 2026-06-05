@@ -5,8 +5,7 @@ draft: false
 keyword: "Tiger eye gemstone catholic prayer rosary beads"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605193739-pexels.jpg"
-thumbnail: "images/20260605193739-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

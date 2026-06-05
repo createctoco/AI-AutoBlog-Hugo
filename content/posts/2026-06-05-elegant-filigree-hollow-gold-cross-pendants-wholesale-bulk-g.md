@@ -5,8 +5,7 @@ draft: false
 keyword: "Elegant filigree hollow gold cross pendant ladies gift wholesale bulk"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605181417-pexels.jpg"
-thumbnail: "images/20260605181417-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

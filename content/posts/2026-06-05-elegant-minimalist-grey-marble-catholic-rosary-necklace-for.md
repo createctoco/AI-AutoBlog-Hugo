@@ -5,8 +5,7 @@ draft: false
 keyword: "Grey marble stone minimalist men catholic rosary necklace"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605192123-pexels.jpg"
-thumbnail: "images/20260605192123-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

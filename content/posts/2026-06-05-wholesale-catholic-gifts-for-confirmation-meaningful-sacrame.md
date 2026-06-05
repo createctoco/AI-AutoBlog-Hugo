@@ -5,8 +5,7 @@ draft: false
 keyword: "Confirmation sacrament wholesale catholic gifts"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605191727-pexels.jpg"
-thumbnail: "images/20260605191727-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

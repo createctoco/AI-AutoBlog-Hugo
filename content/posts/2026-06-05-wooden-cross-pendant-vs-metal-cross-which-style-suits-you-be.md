@@ -5,8 +5,7 @@ draft: false
 keyword: "wooden cross pendant vs metal cross"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605180331-pexels.jpg"
-thumbnail: "images/20260605180331-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

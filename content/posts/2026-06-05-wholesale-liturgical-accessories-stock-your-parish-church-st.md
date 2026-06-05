@@ -5,8 +5,7 @@ draft: false
 keyword: "Wholesale liturgical accessory for parish church store"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605182908-pexels.jpg"
-thumbnail: "images/20260605182908-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

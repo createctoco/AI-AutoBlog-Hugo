@@ -5,8 +5,7 @@ draft: false
 keyword: "Custom baptism gift box religious jewelry packaging"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605194253-pexels.jpg"
-thumbnail: "images/20260605194253-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

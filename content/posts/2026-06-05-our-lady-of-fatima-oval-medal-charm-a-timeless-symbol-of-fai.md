@@ -5,8 +5,7 @@ draft: false
 keyword: "Our Lady of Fatima virgin mary oval medal charm"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605191335-pexels.jpg"
-thumbnail: "images/20260605191335-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

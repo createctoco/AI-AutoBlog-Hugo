@@ -5,8 +5,7 @@ draft: false
 keyword: "Matte finish metal bead catholic devotional rosary"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605175558-pexels.jpg"
-thumbnail: "images/20260605175558-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">

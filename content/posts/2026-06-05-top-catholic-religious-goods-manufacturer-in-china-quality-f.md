@@ -5,8 +5,7 @@ draft: false
 keyword: "catholic religious goods manufacturer China"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "images/20260605190253-pexels.jpg"
-thumbnail: "images/20260605190253-pexels.jpg"
+
 ---
 
 <script type="application/ld+json">
