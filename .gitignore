@@ -1,5 +1,6 @@
 .hugo_build.lock
 themes/blowfish/
+/assets/images/
 /public/
 /resources/
 hugo.exe
