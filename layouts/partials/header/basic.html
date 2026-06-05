@@ -1,4 +1,13 @@
 {{/* Override: sticky thin header bar, full-width深色背景 */}}
+<style>
+  /* 导航栏内容区全宽，覆盖 Blowfish container 限制 */
+  header .main-menu {
+    max-width: none !important;
+    width: 100% !important;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+</style>
 <header class="sticky top-0 z-50 bg-neutral-100 dark:bg-neutral-800 border-b border-neutral-300 dark:border-neutral-600 shadow-sm">
   <div class="main-menu flex items-center w-full gap-2 py-px px-4">
     {{ if .Site.Params.Logo }}

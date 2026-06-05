@@ -6,8 +6,8 @@ keyword: "Funeral memorial mini cross favor wholesale supply"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
 
-featureimage: "/images/20260605154343-pexels.jpg"
-thumbnail: "/images/20260605154343-pexels.jpg"
+featureimage: "https://rosarysupply.com/images/20260605154343-pexels.jpg"
+thumbnail: "https://rosarysupply.com/images/20260605154343-pexels.jpg"
 ---
 
 <script type="application/ld+json">

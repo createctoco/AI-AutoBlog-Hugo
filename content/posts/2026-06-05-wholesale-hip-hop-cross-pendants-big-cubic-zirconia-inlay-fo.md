@@ -6,8 +6,8 @@ keyword: "Hip hop big cubic zirconia inlay cross pendant men wholesale"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
 
-featureimage: "/images/20260605162823-pexels.jpg"
-thumbnail: "/images/20260605162823-pexels.jpg"
+featureimage: "https://rosarysupply.com/images/20260605162823-pexels.jpg"
+thumbnail: "https://rosarysupply.com/images/20260605162823-pexels.jpg"
 ---
 
 <script type="application/ld+json">

@@ -6,8 +6,8 @@ keyword: "Antique bronze jesus crucifix finger ring wholesale"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
 
-featureimage: "/images/20260605180331-pexels.jpg"
-thumbnail: "/images/20260605180331-pexels.jpg"
+featureimage: "https://rosarysupply.com/images/20260605180331-pexels.jpg"
+thumbnail: "https://rosarysupply.com/images/20260605180331-pexels.jpg"
 ---
 
 <script type="application/ld+json">

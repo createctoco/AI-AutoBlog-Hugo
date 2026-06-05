@@ -6,8 +6,8 @@ keyword: "Wholesale liturgical accessory for parish church store"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
 
-featureimage: "/images/20260605192123-pexels.jpg"
-thumbnail: "/images/20260605192123-pexels.jpg"
+featureimage: "https://rosarysupply.com/images/20260605192123-pexels.jpg"
+thumbnail: "https://rosarysupply.com/images/20260605192123-pexels.jpg"
 ---
 
 <script type="application/ld+json">

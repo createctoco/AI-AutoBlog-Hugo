@@ -6,8 +6,8 @@ keyword: "Bulk mixed assorted saint medal pack diy rosary crafting supply"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
 
-featureimage: "/images/20260605191335-pexels.jpg"
-thumbnail: "/images/20260605191335-pexels.jpg"
+featureimage: "https://rosarysupply.com/images/20260605191335-pexels.jpg"
+thumbnail: "https://rosarysupply.com/images/20260605191335-pexels.jpg"
 ---
 
 <script type="application/ld+json">

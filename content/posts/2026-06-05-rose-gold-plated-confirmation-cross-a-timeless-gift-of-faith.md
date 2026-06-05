@@ -6,8 +6,8 @@ keyword: "Rose gold plated confirmation cross pendant gift"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
 
-featureimage: "/images/ctoco-products.jpg"
-thumbnail: "/images/ctoco-products.jpg"
+featureimage: "https://rosarysupply.com/images/ctoco-products.jpg"
+thumbnail: "https://rosarysupply.com/images/ctoco-products.jpg"
 ---
 
 <script type="application/ld+json">
