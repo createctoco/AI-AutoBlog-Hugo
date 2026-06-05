@@ -11,6 +11,7 @@ on:
     branches: [main]
     paths-ignore:
       - 'content/posts/**'
+      - 'static/images/**'
 
 permissions:
   contents: write
@@ -33,21 +34,22 @@ jobs:
       - name: Install Python dependencies
         run: pip install requests pyyaml
 
-      - name: Create posts directory
-        run: mkdir -p content/posts
+      - name: Create directories
+        run: mkdir -p content/posts static/images
 
       - name: Generate blog post
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           AI_MODEL: ${{ secrets.AI_MODEL }}
           AI_API_URL: ${{ secrets.AI_API_URL }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
         run: python scripts/generate-post.py
 
       - name: Commit and push new post
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add content/posts/
+          git add content/posts/ static/images/
           git commit -m "Auto generate blog post [skip ci]" || echo "No changes to commit"
           git push
 

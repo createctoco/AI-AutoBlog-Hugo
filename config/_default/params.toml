@@ -4,6 +4,7 @@ autoSwitchAppearance = true
 enableSearch = true
 enableCodeCopy = false
 mainSections = ["posts"]
+smartTOC = true
 
 [homepage]
 layout = "background"
@@ -20,6 +21,9 @@ showPagination = true
 showReadingTime = true
 showWordCount = true
 showTaxonomies = true
+showHero = true
+heroStyle = "background"
+showTableOfContents = true
 
 [list]
 showSummary = true
