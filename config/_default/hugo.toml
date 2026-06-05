@@ -4,5 +4,11 @@ title = "Catholic Religious Gifts Guide - RosarySupply"
 theme = "blowfish"
 enableGitInfo = false
 
+# Sitemap 配置
+[sitemap]
+  changefreq = "weekly"
+  priority   = 0.5
+  filename   = "sitemap.xml"
+
 [markup.goldmark.renderer]
 unsafe = true
