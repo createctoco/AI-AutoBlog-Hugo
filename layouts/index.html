@@ -1,0 +1,29 @@
+{{ define "main" }}
+{{ .Scratch.Set "scope" "home" }}
+
+  {{/* Hero Section */}}
+  {{ $heroLayout := site.Params.homepage.layout | default "background" }}
+  {{ $heroStyle := print "hero/" $heroLayout ".html" }}
+  {{ if templates.Exists ( printf "partials/%s" $heroStyle ) }}
+    {{ partial $heroStyle . }}
+  {{ else }}
+    {{ partial "hero/background.html" . }}
+  {{ end }}
+
+  {{/* Latest 24 Articles - 3-column grid (九宫格) */}}
+  {{ $pages := where site.RegularPages "Section" "posts" }}
+  {{ $latest := first 24 ($pages.ByDate.Reverse) }}
+
+  {{ if gt (len $latest) 0 }}
+    <section class="mt-10 w-full">
+      <div class="max-w-[1200px] mx-auto px-4">
+        <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+          {{ range $latest }}
+            {{ partial "article-link/card.html" . }}
+          {{ end }}
+        </div>
+      </div>
+    </section>
+  {{ end }}
+
+{{ end }}
