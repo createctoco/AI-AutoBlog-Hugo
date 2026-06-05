@@ -1,6 +1,6 @@
-{{/* Override: sticky thin header bar with light gray background */}}
-<header class="sticky top-0 z-50 bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-700 shadow-sm">
-  <div class="main-menu flex items-center w-full gap-2 py-1 px-2">
+{{/* Override: sticky thin header bar, full-width深色背景 */}}
+<header class="sticky top-0 z-50 bg-neutral-100 dark:bg-neutral-800 border-b border-neutral-300 dark:border-neutral-600 shadow-sm">
+  <div class="main-menu flex items-center w-full gap-2 py-1 px-4 container mx-auto">
     {{ if .Site.Params.Logo }}
       {{ $logo := resources.Get .Site.Params.Logo }}
       {{ if $logo }}
