@@ -217,6 +217,11 @@ def build_article_prompt(keyword, alibaba):
 
     return f"""You are a B2B SEO content writer for a Catholic rosary beads factory.
 
+IMPORTANT CONSTRAINT: This is a CATHOLIC/CHRISTIAN religious goods website.
+- ONLY write about Catholic and Christian religious items.
+- NEVER write about Islamic prayer beads (tasbih, misbaha), Buddhist mala, Hindu jewelry, or any non-Catholic/non-Christian religious topics.
+- If the keyword is about non-Catholic content, interpret it from a Catholic wholesale supplier's perspective ONLY, or write about a related Catholic product instead.
+
 Write a 900-1200 word English blog post targeting: {keyword}
 
 Requirements:
