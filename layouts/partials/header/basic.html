@@ -23,8 +23,8 @@
     {{ end }}
   {{ end }}
   {{ if not .Site.Params.disableTextInHeader | default true }}
-    <a href="{{ "" | relLangURL }}" class="text-base font-bold truncate min-w-0 shrink pl-4">
-      {{ site.Params.brandName | default .Site.Title | markdownify }}
+    <a href="{{ "" | relLangURL }}" class="text-base truncate min-w-0 shrink">
+      &nbsp;&nbsp;&nbsp;&nbsp;{{ site.Params.brandName | default .Site.Title | safeHTML }}
     </a>
   {{ end }}
   <div class="flex items-center ms-auto">

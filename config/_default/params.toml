@@ -5,7 +5,7 @@ enableSearch = true
 enableCodeCopy = false
 mainSections = ["posts"]
 smartTOC = true
-brandName = "Catholic Religious Gifts Guide - RosarySupply.com"
+brandName = "<strong>Catholic Religious Gifts Guide</strong> - RosarySupply.com"
 copyright = "<a href='https://ctoco.com/'>CTOCO-Catholic Rosary</a>"
 
 [homepage]
