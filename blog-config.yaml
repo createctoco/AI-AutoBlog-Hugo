@@ -3,8 +3,8 @@
 
 baseURL: "https://rosarysupply.com/"
 languageCode: "en-us"
-title: "Catholic Religious Gifts Guide"
-theme: "PaperMod"
+title: "Catholic Religious Gifts Guide → RosarySupply.com"
+theme: "blowfish"
 enableGitInfo: false
 
 # ============================================
