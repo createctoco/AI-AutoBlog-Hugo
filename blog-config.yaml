@@ -1,7 +1,7 @@
 # AI-AutoBlog Hugo - Catholic Religious Gifts Auto Blog
 # Powered by DeepSeek API + Hugo + GitHub Pages
 
-baseURL: "https://createctoco.github.io/rosary/"
+baseURL: "https://rosarysupply.com/"
 languageCode: "en-us"
 title: "Catholic Religious Gifts Guide"
 theme: "PaperMod"
