@@ -2,8 +2,15 @@ name: Auto Generate Blog Post
 
 on:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '0 0 * * *'    # UTC 0:00 = 北京 8:00
+    - cron: '0 6 * * *'    # UTC 6:00 = 北京 14:00
+    - cron: '0 12 * * *'   # UTC 12:00 = 北京 20:00
+    - cron: '0 18 * * *'   # UTC 18:00 = 北京 2:00
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'content/posts/**'
 
 permissions:
   contents: write
@@ -49,11 +56,6 @@ jobs:
         with:
           hugo-version: '0.161.0'
           extended: true
-
-      - name: Install PaperMod theme
-        run: |
-          rm -rf themes/PaperMod
-          git clone --depth 1 https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
 
       - name: Build Hugo site
         run: hugo --minify

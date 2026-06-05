@@ -2,6 +2,7 @@
 """
 Auto-generate a B2B SEO blog post using DeepSeek API.
 Saves output as content/posts/YYYY-MM-DD-slug.md
+Supports multiple posts per day with unique filenames.
 """
 
 import os
@@ -26,12 +27,12 @@ def get_alibaba(config):
     }
 
 # ============================================
-# Pick Keyword
+# Pick Keyword (avoid duplicates, random selection)
 # ============================================
 def pick_keyword(config):
     keywords = config.get("keywords", [])
     if not keywords:
-        print("ERROR: no keywords found in config.yaml")
+        print("ERROR: no keywords found in blog-config.yaml")
         sys.exit(1)
 
     posts_dir = "content/posts"
@@ -50,9 +51,11 @@ def pick_keyword(config):
 
     available = [k for k in keywords if k not in used]
     if not available:
-        available = keywords  # all used, restart
+        print("All keywords used, resetting cycle...")
+        available = keywords  # all used, restart cycle
 
-    chosen = available[0]
+    chosen = random.choice(available)
+    print(f"Used keywords: {len(used)}/{len(keywords)}")
     print(f"Selected keyword: {chosen}")
     return chosen
 
@@ -132,13 +135,21 @@ def slugify(text):
 # Build Markdown File Content
 # ============================================
 def build_markdown(title, keyword, article_html, alibaba):
-    today = datetime.now().strftime("%Y-%m-%d")
+    now = datetime.now(timezone.utc)
+    date_str = now.strftime("%Y-%m-%d")
+    time_str = now.strftime("%H%M%S")
     slug = slugify(title)
-    filepath = f"content/posts/{today}-{slug}.md"
+    filepath = f"content/posts/{date_str}-{slug}.md"
+
+    # If file already exists, append time suffix to avoid collision
+    if os.path.exists(filepath):
+        filepath = f"content/posts/{date_str}-{time_str}-{slug}.md"
 
     store = alibaba["store"]
     products = alibaba["products"]
     random_links = random.sample(products, min(2, len(products))) if products else []
+
+    iso_date = now.strftime("%Y-%m-%dT%H:%M:%S+08:00")
 
     # JSON-LD FAQ
     faq = """<script type="application/ld+json">
@@ -174,7 +185,7 @@ def build_markdown(title, keyword, article_html, alibaba):
 
     content = f"""---
 title: "{title}"
-date: {today}T00:00:00+08:00
+date: {iso_date}
 draft: false
 keyword: "{keyword}"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
