@@ -24,11 +24,12 @@
     </nav>
 
     {{- /* Copyright */ -}}
-    {{ if site.Params.copyright }}
     <div class="text-center text-xs text-neutral-500 dark:text-neutral-400 mb-2">
+      © {{ now.Year }}
+      {{ if site.Params.copyright }}
       {{ site.Params.copyright | safeHTML }}
+      {{ end }}
     </div>
-    {{ end }}
 
     {{- /* Powered by */ -}}
     <div class="text-center text-xs text-neutral-400 dark:text-neutral-500">

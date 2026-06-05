@@ -5,10 +5,12 @@ enableSearch = true
 enableCodeCopy = false
 mainSections = ["posts"]
 smartTOC = true
-copyright = "© { year } [CTOCO-Catholic Rosary](https://ctoco.com/)"
+brandName = "RosarySupply.com"
+copyright = "[CTOCO-Catholic Rosary](https://ctoco.com/)"
 
 [homepage]
 layout = "background"
+subtitle = "Catholic Religious Gifts Guide - RosarySupply"
 showRecent = true
 showRecentItems = 6
 showReadingTime = true
