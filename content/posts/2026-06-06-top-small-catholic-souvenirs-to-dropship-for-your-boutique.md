@@ -5,8 +5,8 @@ draft: false
 keyword: "Dropship small catholic souvenir for online boutique retailers"
 tags: ["wholesale", "catholic", "rosary", "B2B"]
 categories: ["Rosary Beads"]
-featureimage: "https://images.pexels.com/photos/9566267/pexels-photo-9566267.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
-thumbnail: "https://images.pexels.com/photos/9566267/pexels-photo-9566267.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+featureimage: "https://rosarysupply.com/images/20260605153408-local.jpg"
+thumbnail: "https://rosarysupply.com/images/20260605153408-local.jpg"
 faqJson: |
   {
     "@context": "https://schema.org",
