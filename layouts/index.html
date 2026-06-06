@@ -47,9 +47,9 @@
     </div>
   </section>
 
-  {{/* Latest 24 Articles - 3-column grid (九宫格) */}}
+  {{/* Latest 12 Articles - 3-column grid (九宫格) */}}
   {{ $pages := where site.RegularPages "Section" "posts" }}
-  {{ $latest := first 24 ($pages.ByDate.Reverse) }}
+  {{ $latest := first 12 ($pages.ByDate.Reverse) }}
 
   {{ if gt (len $latest) 0 }}
     <section class="mt-10 w-full">
