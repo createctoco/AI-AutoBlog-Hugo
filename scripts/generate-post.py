@@ -16,7 +16,7 @@ import random
 import glob
 import yaml
 import requests
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 # ============================================
 # Load Configuration
@@ -133,7 +133,7 @@ def fetch_local_fallback_image():
     chosen = random.choice(image_files)
     basename = os.path.basename(chosen)
     print(f"Local fallback image: {basename}")
-    return f"images/{basename}"  # Hugo serves static/images/ at /images/
+    return f"https://rosarysupply.com/images/{basename}"  # Absolute URL for Blowfish hotlinkFeatureImage
 
 
 # ============================================
@@ -268,7 +268,9 @@ def slugify(text):
 # Build Markdown File Content
 # ============================================
 def build_markdown(title, keyword, article_md, alibaba, featured_image, faq_json):
-    now = datetime.now(timezone.utc)
+    # Use Beijing time (UTC+8) consistently
+    tz_bj = timezone(timedelta(hours=8))
+    now = datetime.now(tz_bj)
     date_str = now.strftime("%Y-%m-%d")
     time_str = now.strftime("%H%M%S")
     slug = slugify(title)
@@ -284,10 +286,12 @@ def build_markdown(title, keyword, article_md, alibaba, featured_image, faq_json
 
     iso_date = now.strftime("%Y-%m-%dT%H:%M:%S+08:00")
 
+    # Escape double quotes in title for safe YAML
+    safe_title = title.replace('"', '\\"')
     # Build front matter
     front_matter_lines = [
         '---',
-        f'title: "{title}"',
+        f'title: "{safe_title}"',
         f'date: {iso_date}',
         'draft: false',
         f'keyword: "{keyword}"',
@@ -305,9 +309,6 @@ def build_markdown(title, keyword, article_md, alibaba, featured_image, faq_json
     front_matter_lines.append('---')
     front_matter = '\n'.join(front_matter_lines)
 
-    # FAQ is now in front matter; do NOT put <script> tag in body
-    faq = ""
-
     # CTA block in Markdown
     cta = "## Shop Wholesale Rosary Beads\n\n"
     cta += f"Looking for wholesale catholic rosary beads? Visit our **[Alibaba Store]({store})** for factory-direct pricing.\n\n"
@@ -317,8 +318,6 @@ def build_markdown(title, keyword, article_md, alibaba, featured_image, faq_json
             cta += f"- [View Product on Alibaba]({link})\n"
 
     content = f"""{front_matter}
-
-{faq}
 
 {article_md}
 
