@@ -1,19 +1,20 @@
 {{/* Override: sticky thin header bar, full-width深色背景 */}}
 <style>
-  /* PC 端（≥1920px）限制最大宽度 1920px，覆盖 Blowfish 的 max-w-7xl(1280px) */
-  @media (min-width: 1920px) {
-    /* 页面主体容器 */
+  /* 页面内容区：≥1440px 限制最大宽度 1440px */
+  @media (min-width: 1440px) {
     .max-w-7xl {
-      max-width: 1920px !important;
+      max-width: 1440px !important;
     }
-    /* 导航栏内容区 */
+  }
+  /* 导航栏：≥1920px 限制最大宽度 1920px */
+  @media (min-width: 1920px) {
     header .main-menu {
       max-width: 1920px !important;
       margin-left: auto !important;
       margin-right: auto !important;
     }
   }
-  /* 小于 1920px 时保持全宽自适应 */
+  /* 小于 1440px 时保持全宽自适应 */
 </style>
 <header class="sticky top-0 z-50 bg-neutral-100 dark:bg-neutral-800 border-b border-neutral-300 dark:border-neutral-600 shadow-sm">
   <div class="main-menu flex items-center w-full gap-2 py-px px-4">
