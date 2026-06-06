@@ -81,6 +81,8 @@ jobs:
         run: |
           rm -rf themes/blowfish
           git clone --depth 1 https://github.com/nunocoracao/blowfish.git themes/blowfish
+          # 用项目的自定义 sitemap 覆盖主题版本
+          cp layouts/_default/sitemap.xml themes/blowfish/layouts/_default/sitemap.xml
 
       # ✅ 正确版本：actions-hugo 只有 v3
       - name: Setup Hugo

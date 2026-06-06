@@ -6,13 +6,22 @@
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-{{/* 所有正式页面（含 section 列表页） */}}
-{{ range where .Site.Pages "Sitemap.Disable" "ne" true }}
+{{/* 所有 Section 页面（/posts/ 等） */}}
+  {{ range .Site.Sections }}
   <url>
     <loc>{{ .Permalink }}</loc>
     {{ if not .Lastmod.IsZero }}<lastmod>{{ .Lastmod.Format "2006-01-02T15:04:05-07:00" }}</lastmod>{{ end }}
-    {{ with .Params.sitemap_changefreq }}<changefreq>{{ . }}</changefreq>{{ else }}<changefreq>weekly</changefreq>{{ end }}
-    {{ with .Params.sitemap_priority }}<priority>{{ . }}</priority>{{ else if .IsHome }}<priority>1.0</priority>{{ else if .IsSection }}<priority>0.8</priority>{{ else }}<priority>0.6</priority>{{ end }}
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
-{{ end }}
+  {{ end }}
+{{/* 所有文章页面 */}}
+  {{ range .Site.RegularPages }}
+  <url>
+    <loc>{{ .Permalink }}</loc>
+    {{ if not .Lastmod.IsZero }}<lastmod>{{ .Lastmod.Format "2006-01-02T15:04:05-07:00" }}</lastmod>{{ end }}
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  {{ end }}
 </urlset>
