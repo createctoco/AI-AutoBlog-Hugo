@@ -100,3 +100,21 @@
     })();
   </script>
 {{ end }}
+
+{{/* 隐藏 /posts/ 页面的 "Posts" 标题 */}}
+<script>
+  (function () {
+    if (window.location.pathname === '/posts/' || window.location.pathname === '/posts/index.html') {
+      document.addEventListener('DOMContentLoaded', function () {
+        var h1 = document.querySelector('main#main-content > header > h1');
+        if (h1) h1.style.display = 'none';
+        /* 同时隐藏标题下方的 meta 行（作者/日期等，此处 /posts/ 没有 but keep it clean） */
+        var header = document.querySelector('main#main-content > header');
+        if (header) {
+          var meta = header.querySelector('.mt-1.mb-2');
+          if (meta) meta.style.display = 'none';
+        }
+      });
+    }
+  })();
+</script>
