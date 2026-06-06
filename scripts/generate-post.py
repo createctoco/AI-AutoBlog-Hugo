@@ -67,6 +67,43 @@ def pick_keyword(config):
 # ============================================
 # Fetch Featured Image from Pexels API
 # ============================================
+
+def is_japanese_image(photo):
+    """
+    Check if a Pexels photo is Japanese-themed and should be excluded.
+    Returns True if the image should be SKIPPED.
+    """
+    # Blacklisted Pexels photo IDs (confirmed bad images)
+    BLACKLISTED_PHOTO_IDS = {
+        "9566267",   # Japanese-themed image, confirmed by user
+    }
+
+    photo_id = str(photo.get("id", ""))
+    if photo_id in BLACKLISTED_PHOTO_IDS:
+        print(f"  Skipping blacklisted photo ID: {photo_id}")
+        return True
+
+    # Check alt text for Japanese-related keywords
+    alt_text = (photo.get("alt") or "").lower()
+    japanese_keywords = [
+        "japan", "japanese", "tokyo", "kyoto", "osaka", "hiroshima",
+        "shinto", "torii", "geisha", "kimono", "sake", "matcha",
+        "zen garden", "bonsai", "origami", "sushi", "ramen",
+    ]
+    for kw in japanese_keywords:
+        if kw in alt_text:
+            print(f"  Skipping Japanese-themed photo (alt: ...{alt_text[:60]}...)")
+            return True
+
+    # Check photographer name for CJK characters (Japanese/Chinese/Korean)
+    photographer = photo.get("photographer", "")
+    if __import__('re').search(r'[぀-ゟ゠-ヿ一-鿿]', photographer):
+        print(f"  Skipping photo by CJK photographer: {photographer}")
+        return True
+
+    return False
+
+
 def fetch_pexels_image(keyword, api_key):
     """Fetch a Pexels image URL (no local download, avoid repo bloat)"""
     if not api_key:
@@ -95,7 +132,12 @@ def fetch_pexels_image(keyword, api_key):
             data = response.json()
 
             if data.get("photos"):
-                photo = random.choice(data["photos"])
+                # Filter out Japanese-themed images
+                filtered_photos = [p for p in data["photos"] if not is_japanese_image(p)]
+                if not filtered_photos:
+                    print(f"  All {len(data['photos'])} photos filtered out (Japanese-themed), trying next search term...")
+                    continue
+                photo = random.choice(filtered_photos)
                 image_url = photo["src"]["large2x"]
                 photographer = photo.get("photographer", "Pexels")
                 print(f"Pexels image URL: {image_url} (by {photographer})")
