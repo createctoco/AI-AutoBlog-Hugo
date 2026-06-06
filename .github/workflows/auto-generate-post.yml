@@ -101,15 +101,12 @@ jobs:
           publish_branch: gh-pages
           cname: rosarysupply.com
 
-      # ---- 构建后自动提交 sitemap 到搜索引擎 ----
-      - name: Submit sitemap to Google
+      # ---- 部署后通知搜索引擎抓取 sitemap ----
+      - name: Ping search engines for sitemap
         run: |
           echo "Pinging Google..."
           curl -s -o /dev/null -w "%{http_code}" "https://www.google.com/ping?sitemap=https://rosarysupply.com/sitemap.xml" || true
           echo ""
-
-      - name: Submit sitemap to Bing
-        run: |
           echo "Pinging Bing..."
           curl -s -o /dev/null -w "%{http_code}" "https://www.bing.com/ping?sitemap=https://rosarysupply.com/sitemap.xml" || true
           echo ""

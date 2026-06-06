@@ -4,11 +4,15 @@ title = "Catholic Religious Gifts Guide - RosarySupply"
 theme = "blowfish"
 enableGitInfo = false
 
-# Sitemap 配置
+# 开启 Sitemap 输出（Hugo 原生生成 sitemap.xml）
+[outputs]
+home = ["HTML", "RSS", "Sitemap"]
+
+# Sitemap 全局默认参数
 [sitemap]
-  changefreq = "weekly"
-  priority   = 0.5
-  filename   = "sitemap.xml"
+changefreq = "weekly"
+priority   = 0.6
+filename   = "sitemap.xml"
 
 [markup.goldmark.renderer]
 unsafe = true
