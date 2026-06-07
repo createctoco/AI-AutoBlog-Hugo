@@ -1,6 +1,6 @@
 name: "AI-AutoBlog Hugo"
 description: "Auto-generate SEO blog posts with DeepSeek/OpenAI for Hugo + GitHub Pages. "
-url: "[https://github.com/createctoco/rosary/]"
+url: "[https://github.com/createctoco/AI-AutoBlog-Hugo]"
 author: "createctoco
 "
 
